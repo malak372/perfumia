@@ -1,0 +1,1 @@
+print("PERFUMIA Raspberry Pi service started")
