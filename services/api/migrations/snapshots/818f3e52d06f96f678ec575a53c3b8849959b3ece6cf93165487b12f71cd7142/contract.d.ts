@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'6862d869560c4166bf14d2fcc220946931e2c543830799275f7a2c31b05d04b3'>;
+  StorageHashBase<'818f3e52d06f96f678ec575a53c3b8849959b3ece6cf93165487b12f71cd7142'>;
 export type ExecutionHash =
-  ExecutionHashBase<'b6bb7f543067b227236f918ad87e2c87e6a42ad71ecf219b8ccb6a8cf2a07fc4'>;
+  ExecutionHashBase<'ed08bedfb7afb041792228df202f95ee0b3bcc2fa961d785120b012af874428e'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -261,7 +261,6 @@ export type FieldOutputTypes = {
       readonly column: CodecTypes['pg/int4@1']['output'];
       readonly markerType: 'ARUCO' | 'QR';
       readonly markerValue: CodecTypes['pg/text@1']['output'];
-      readonly markerImagePath: CodecTypes['pg/text@1']['output'] | null;
       readonly capacity: CodecTypes['pg/int4@1']['output'] | null;
       readonly quantity: CodecTypes['pg/int4@1']['output'];
       readonly reservedQuantity: CodecTypes['pg/int4@1']['output'];
@@ -287,7 +286,7 @@ export type FieldOutputTypes = {
       readonly orderId: CodecTypes['pg/uuid@1']['output'];
       readonly type: 'NONE' | 'TEXT' | 'VOICE';
       readonly messageText: CodecTypes['pg/text@1']['output'] | null;
-      readonly audioStoragePath: CodecTypes['pg/text@1']['output'] | null;
+      readonly audioUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly qrToken: CodecTypes['pg/uuid@1']['output'];
       readonly qrUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -374,10 +373,6 @@ export type FieldOutputTypes = {
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly orderNumber: CodecTypes['pg/text@1']['output'];
       readonly userId: CodecTypes['pg/uuid@1']['output'] | null;
-      readonly source: 'WEB' | 'MOBILE' | 'KIOSK';
-      readonly contactEmail: CodecTypes['pg/text@1']['output'] | null;
-      readonly contactPhone: CodecTypes['pg/text@1']['output'] | null;
-      readonly trackingToken: CodecTypes['pg/uuid@1']['output'];
       readonly preferenceId: CodecTypes['pg/uuid@1']['output'];
       readonly selectedPerfumeId: CodecTypes['pg/uuid@1']['output'];
       readonly unitPrice: Numeric<10, 2>;
@@ -439,7 +434,7 @@ export type FieldOutputTypes = {
       readonly intensity: 'LIGHT' | 'MEDIUM' | 'STRONG' | null;
       readonly longevity: 'SHORT' | 'MODERATE' | 'LONG' | null;
       readonly description: CodecTypes['pg/text@1']['output'] | null;
-      readonly imageStoragePath: CodecTypes['pg/text@1']['output'] | null;
+      readonly imageUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly active: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -465,9 +460,7 @@ export type FieldOutputTypes = {
     readonly SupportTicket: {
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly ticketNumber: CodecTypes['pg/text@1']['output'];
-      readonly userId: CodecTypes['pg/uuid@1']['output'] | null;
-      readonly requesterName: CodecTypes['pg/text@1']['output'] | null;
-      readonly requesterEmail: CodecTypes['pg/text@1']['output'] | null;
+      readonly userId: CodecTypes['pg/uuid@1']['output'];
       readonly orderId: CodecTypes['pg/uuid@1']['output'] | null;
       readonly paymentId: CodecTypes['pg/uuid@1']['output'] | null;
       readonly category: 'PAYMENT' | 'ORDER' | 'ACCOUNT' | 'HARDWARE' | 'DELIVERY' | 'OTHER';
@@ -478,16 +471,6 @@ export type FieldOutputTypes = {
       readonly resolvedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    };
-    readonly SupportTicketAttachment: {
-      readonly id: CodecTypes['pg/uuid@1']['output'];
-      readonly ticketId: CodecTypes['pg/uuid@1']['output'];
-      readonly type: 'IMAGE' | 'AUDIO' | 'FILE';
-      readonly fileName: CodecTypes['pg/text@1']['output'] | null;
-      readonly mimeType: CodecTypes['pg/text@1']['output'] | null;
-      readonly storagePath: CodecTypes['pg/text@1']['output'];
-      readonly sizeBytes: CodecTypes['pg/int4@1']['output'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly SystemSetting: {
       readonly id: CodecTypes['pg/uuid@1']['output'];
@@ -542,7 +525,6 @@ export type FieldInputTypes = {
       readonly column: CodecTypes['pg/int4@1']['input'];
       readonly markerType: 'ARUCO' | 'QR';
       readonly markerValue: CodecTypes['pg/text@1']['input'];
-      readonly markerImagePath: CodecTypes['pg/text@1']['input'] | null;
       readonly capacity: CodecTypes['pg/int4@1']['input'] | null;
       readonly quantity: CodecTypes['pg/int4@1']['input'];
       readonly reservedQuantity: CodecTypes['pg/int4@1']['input'];
@@ -568,7 +550,7 @@ export type FieldInputTypes = {
       readonly orderId: CodecTypes['pg/uuid@1']['input'];
       readonly type: 'NONE' | 'TEXT' | 'VOICE';
       readonly messageText: CodecTypes['pg/text@1']['input'] | null;
-      readonly audioStoragePath: CodecTypes['pg/text@1']['input'] | null;
+      readonly audioUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly qrToken: CodecTypes['pg/uuid@1']['input'];
       readonly qrUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -655,10 +637,6 @@ export type FieldInputTypes = {
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly orderNumber: CodecTypes['pg/text@1']['input'];
       readonly userId: CodecTypes['pg/uuid@1']['input'] | null;
-      readonly source: 'WEB' | 'MOBILE' | 'KIOSK';
-      readonly contactEmail: CodecTypes['pg/text@1']['input'] | null;
-      readonly contactPhone: CodecTypes['pg/text@1']['input'] | null;
-      readonly trackingToken: CodecTypes['pg/uuid@1']['input'];
       readonly preferenceId: CodecTypes['pg/uuid@1']['input'];
       readonly selectedPerfumeId: CodecTypes['pg/uuid@1']['input'];
       readonly unitPrice: CodecTypes['pg/numeric@1']['input'];
@@ -720,7 +698,7 @@ export type FieldInputTypes = {
       readonly intensity: 'LIGHT' | 'MEDIUM' | 'STRONG' | null;
       readonly longevity: 'SHORT' | 'MODERATE' | 'LONG' | null;
       readonly description: CodecTypes['pg/text@1']['input'] | null;
-      readonly imageStoragePath: CodecTypes['pg/text@1']['input'] | null;
+      readonly imageUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly active: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -746,9 +724,7 @@ export type FieldInputTypes = {
     readonly SupportTicket: {
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly ticketNumber: CodecTypes['pg/text@1']['input'];
-      readonly userId: CodecTypes['pg/uuid@1']['input'] | null;
-      readonly requesterName: CodecTypes['pg/text@1']['input'] | null;
-      readonly requesterEmail: CodecTypes['pg/text@1']['input'] | null;
+      readonly userId: CodecTypes['pg/uuid@1']['input'];
       readonly orderId: CodecTypes['pg/uuid@1']['input'] | null;
       readonly paymentId: CodecTypes['pg/uuid@1']['input'] | null;
       readonly category: 'PAYMENT' | 'ORDER' | 'ACCOUNT' | 'HARDWARE' | 'DELIVERY' | 'OTHER';
@@ -759,16 +735,6 @@ export type FieldInputTypes = {
       readonly resolvedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-    };
-    readonly SupportTicketAttachment: {
-      readonly id: CodecTypes['pg/uuid@1']['input'];
-      readonly ticketId: CodecTypes['pg/uuid@1']['input'];
-      readonly type: 'IMAGE' | 'AUDIO' | 'FILE';
-      readonly fileName: CodecTypes['pg/text@1']['input'] | null;
-      readonly mimeType: CodecTypes['pg/text@1']['input'] | null;
-      readonly storagePath: CodecTypes['pg/text@1']['input'];
-      readonly sizeBytes: CodecTypes['pg/int4@1']['input'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly SystemSetting: {
       readonly id: CodecTypes['pg/uuid@1']['input'];
@@ -822,7 +788,6 @@ export type StorageColumnTypes = {
       readonly column: CodecTypes['pg/int4@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
-      readonly markerImagePath: CodecTypes['pg/text@1']['output'] | null;
       readonly markerType: 'ARUCO' | 'QR';
       readonly markerValue: CodecTypes['pg/text@1']['output'];
       readonly perfumeId: CodecTypes['pg/uuid@1']['output'] | null;
@@ -845,7 +810,7 @@ export type StorageColumnTypes = {
       readonly userId: CodecTypes['pg/uuid@1']['output'] | null;
     };
     readonly giftMessage: {
-      readonly audioStoragePath: CodecTypes['pg/text@1']['output'] | null;
+      readonly audioUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly messageText: CodecTypes['pg/text@1']['output'] | null;
@@ -933,14 +898,11 @@ export type StorageColumnTypes = {
       readonly userId: CodecTypes['pg/uuid@1']['output'];
     };
     readonly order: {
-      readonly contactEmail: CodecTypes['pg/text@1']['output'] | null;
-      readonly contactPhone: CodecTypes['pg/text@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly orderNumber: CodecTypes['pg/text@1']['output'];
       readonly preferenceId: CodecTypes['pg/uuid@1']['output'];
       readonly selectedPerfumeId: CodecTypes['pg/uuid@1']['output'];
-      readonly source: 'WEB' | 'MOBILE' | 'KIOSK';
       readonly status:
         | 'CREATED'
         | 'PENDING_PAYMENT'
@@ -950,7 +912,6 @@ export type StorageColumnTypes = {
         | 'COMPLETED'
         | 'FAILED'
         | 'CANCELLED';
-      readonly trackingToken: CodecTypes['pg/uuid@1']['output'];
       readonly unitPrice: Numeric<10, 2>;
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly userId: CodecTypes['pg/uuid@1']['output'] | null;
@@ -996,7 +957,7 @@ export type StorageColumnTypes = {
       readonly description: CodecTypes['pg/text@1']['output'] | null;
       readonly fragranceFamily: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
-      readonly imageStoragePath: CodecTypes['pg/text@1']['output'] | null;
+      readonly imageUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly intensity: 'LIGHT' | 'MEDIUM' | 'STRONG' | null;
       readonly longevity: 'SHORT' | 'MODERATE' | 'LONG' | null;
       readonly name: CodecTypes['pg/text@1']['output'];
@@ -1032,24 +993,12 @@ export type StorageColumnTypes = {
       readonly message: CodecTypes['pg/text@1']['output'];
       readonly orderId: CodecTypes['pg/uuid@1']['output'] | null;
       readonly paymentId: CodecTypes['pg/uuid@1']['output'] | null;
-      readonly requesterEmail: CodecTypes['pg/text@1']['output'] | null;
-      readonly requesterName: CodecTypes['pg/text@1']['output'] | null;
       readonly resolvedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
       readonly subject: CodecTypes['pg/text@1']['output'];
       readonly ticketNumber: CodecTypes['pg/text@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-      readonly userId: CodecTypes['pg/uuid@1']['output'] | null;
-    };
-    readonly supportTicketAttachment: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-      readonly fileName: CodecTypes['pg/text@1']['output'] | null;
-      readonly id: CodecTypes['pg/uuid@1']['output'];
-      readonly mimeType: CodecTypes['pg/text@1']['output'] | null;
-      readonly sizeBytes: CodecTypes['pg/int4@1']['output'] | null;
-      readonly storagePath: CodecTypes['pg/text@1']['output'];
-      readonly ticketId: CodecTypes['pg/uuid@1']['output'];
-      readonly type: 'IMAGE' | 'AUDIO' | 'FILE';
+      readonly userId: CodecTypes['pg/uuid@1']['output'];
     };
     readonly systemSetting: {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -1103,7 +1052,6 @@ export type StorageColumnInputTypes = {
       readonly column: CodecTypes['pg/int4@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
-      readonly markerImagePath: CodecTypes['pg/text@1']['input'] | null;
       readonly markerType: 'ARUCO' | 'QR';
       readonly markerValue: CodecTypes['pg/text@1']['input'];
       readonly perfumeId: CodecTypes['pg/uuid@1']['input'] | null;
@@ -1126,7 +1074,7 @@ export type StorageColumnInputTypes = {
       readonly userId: CodecTypes['pg/uuid@1']['input'] | null;
     };
     readonly giftMessage: {
-      readonly audioStoragePath: CodecTypes['pg/text@1']['input'] | null;
+      readonly audioUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly messageText: CodecTypes['pg/text@1']['input'] | null;
@@ -1214,14 +1162,11 @@ export type StorageColumnInputTypes = {
       readonly userId: CodecTypes['pg/uuid@1']['input'];
     };
     readonly order: {
-      readonly contactEmail: CodecTypes['pg/text@1']['input'] | null;
-      readonly contactPhone: CodecTypes['pg/text@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly orderNumber: CodecTypes['pg/text@1']['input'];
       readonly preferenceId: CodecTypes['pg/uuid@1']['input'];
       readonly selectedPerfumeId: CodecTypes['pg/uuid@1']['input'];
-      readonly source: 'WEB' | 'MOBILE' | 'KIOSK';
       readonly status:
         | 'CREATED'
         | 'PENDING_PAYMENT'
@@ -1231,7 +1176,6 @@ export type StorageColumnInputTypes = {
         | 'COMPLETED'
         | 'FAILED'
         | 'CANCELLED';
-      readonly trackingToken: CodecTypes['pg/uuid@1']['input'];
       readonly unitPrice: CodecTypes['pg/numeric@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly userId: CodecTypes['pg/uuid@1']['input'] | null;
@@ -1277,7 +1221,7 @@ export type StorageColumnInputTypes = {
       readonly description: CodecTypes['pg/text@1']['input'] | null;
       readonly fragranceFamily: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
-      readonly imageStoragePath: CodecTypes['pg/text@1']['input'] | null;
+      readonly imageUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly intensity: 'LIGHT' | 'MEDIUM' | 'STRONG' | null;
       readonly longevity: 'SHORT' | 'MODERATE' | 'LONG' | null;
       readonly name: CodecTypes['pg/text@1']['input'];
@@ -1313,24 +1257,12 @@ export type StorageColumnInputTypes = {
       readonly message: CodecTypes['pg/text@1']['input'];
       readonly orderId: CodecTypes['pg/uuid@1']['input'] | null;
       readonly paymentId: CodecTypes['pg/uuid@1']['input'] | null;
-      readonly requesterEmail: CodecTypes['pg/text@1']['input'] | null;
-      readonly requesterName: CodecTypes['pg/text@1']['input'] | null;
       readonly resolvedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
       readonly subject: CodecTypes['pg/text@1']['input'];
       readonly ticketNumber: CodecTypes['pg/text@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-      readonly userId: CodecTypes['pg/uuid@1']['input'] | null;
-    };
-    readonly supportTicketAttachment: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-      readonly fileName: CodecTypes['pg/text@1']['input'] | null;
-      readonly id: CodecTypes['pg/uuid@1']['input'];
-      readonly mimeType: CodecTypes['pg/text@1']['input'] | null;
-      readonly sizeBytes: CodecTypes['pg/int4@1']['input'] | null;
-      readonly storagePath: CodecTypes['pg/text@1']['input'];
-      readonly ticketId: CodecTypes['pg/uuid@1']['input'];
-      readonly type: 'IMAGE' | 'AUDIO' | 'FILE';
+      readonly userId: CodecTypes['pg/uuid@1']['input'];
     };
     readonly systemSetting: {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -1417,7 +1349,7 @@ export namespace Models {
     intensity: 'LIGHT' | 'MEDIUM' | 'STRONG' | null;
     longevity: 'SHORT' | 'MODERATE' | 'LONG' | null;
     description: CodecTypes['pg/text@1']['output'] | null;
-    imageStoragePath: CodecTypes['pg/text@1']['output'] | null;
+    imageUrl: CodecTypes['pg/text@1']['output'] | null;
     active: CodecTypes['pg/bool@1']['output'];
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -1434,7 +1366,6 @@ export namespace Models {
     column: CodecTypes['pg/int4@1']['output'];
     markerType: 'ARUCO' | 'QR';
     markerValue: CodecTypes['pg/text@1']['output'];
-    markerImagePath: CodecTypes['pg/text@1']['output'] | null;
     capacity: CodecTypes['pg/int4@1']['output'] | null;
     quantity: CodecTypes['pg/int4@1']['output'];
     reservedQuantity: CodecTypes['pg/int4@1']['output'];
@@ -1493,10 +1424,6 @@ export namespace Models {
     id: CodecTypes['pg/uuid@1']['output'];
     orderNumber: CodecTypes['pg/text@1']['output'];
     userId: CodecTypes['pg/uuid@1']['output'] | null;
-    source: 'WEB' | 'MOBILE' | 'KIOSK';
-    contactEmail: CodecTypes['pg/text@1']['output'] | null;
-    contactPhone: CodecTypes['pg/text@1']['output'] | null;
-    trackingToken: CodecTypes['pg/uuid@1']['output'];
     preferenceId: CodecTypes['pg/uuid@1']['output'];
     selectedPerfumeId: CodecTypes['pg/uuid@1']['output'];
     unitPrice: Numeric<10, 2>;
@@ -1536,7 +1463,7 @@ export namespace Models {
     orderId: CodecTypes['pg/uuid@1']['output'];
     type: 'NONE' | 'TEXT' | 'VOICE';
     messageText: CodecTypes['pg/text@1']['output'] | null;
-    audioStoragePath: CodecTypes['pg/text@1']['output'] | null;
+    audioUrl: CodecTypes['pg/text@1']['output'] | null;
     qrToken: CodecTypes['pg/uuid@1']['output'];
     qrUrl: CodecTypes['pg/text@1']['output'] | null;
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -1664,9 +1591,7 @@ export namespace Models {
   export type public_SupportTicket = {
     id: CodecTypes['pg/uuid@1']['output'];
     ticketNumber: CodecTypes['pg/text@1']['output'];
-    userId: CodecTypes['pg/uuid@1']['output'] | null;
-    requesterName: CodecTypes['pg/text@1']['output'] | null;
-    requesterEmail: CodecTypes['pg/text@1']['output'] | null;
+    userId: CodecTypes['pg/uuid@1']['output'];
     orderId: CodecTypes['pg/uuid@1']['output'] | null;
     paymentId: CodecTypes['pg/uuid@1']['output'] | null;
     category: 'PAYMENT' | 'ORDER' | 'ACCOUNT' | 'HARDWARE' | 'DELIVERY' | 'OTHER';
@@ -1677,23 +1602,10 @@ export namespace Models {
     resolvedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    attachments: public_SupportTicketAttachment[];
     order: public_Order | null;
     payment: public_Payment | null;
-    user: public_User | null;
-    readonly [RelationKeys]?: 'attachments' | 'order' | 'payment' | 'user';
-  };
-  export type public_SupportTicketAttachment = {
-    id: CodecTypes['pg/uuid@1']['output'];
-    ticketId: CodecTypes['pg/uuid@1']['output'];
-    type: 'IMAGE' | 'AUDIO' | 'FILE';
-    fileName: CodecTypes['pg/text@1']['output'] | null;
-    mimeType: CodecTypes['pg/text@1']['output'] | null;
-    storagePath: CodecTypes['pg/text@1']['output'];
-    sizeBytes: CodecTypes['pg/int4@1']['output'] | null;
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    ticket: public_SupportTicket;
-    readonly [RelationKeys]?: 'ticket';
+    user: public_User;
+    readonly [RelationKeys]?: 'order' | 'payment' | 'user';
   };
   export type public_ContactMessage = {
     id: CodecTypes['pg/uuid@1']['output'];
@@ -1753,7 +1665,6 @@ export declare const models: {
     HardwareJobEvent: Models.public_HardwareJobEvent;
     Notification: Models.public_Notification;
     SupportTicket: Models.public_SupportTicket;
-    SupportTicketAttachment: Models.public_SupportTicketAttachment;
     ContactMessage: Models.public_ContactMessage;
     AiModel: Models.public_AiModel;
     SystemSetting: Models.public_SystemSetting;
@@ -1886,11 +1797,6 @@ type ContractBase = Omit<
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
                   readonly nullable: false;
-                };
-                readonly markerImagePath: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
                 };
                 readonly capacity: {
                   readonly nativeType: 'int4';
@@ -2075,7 +1981,7 @@ type ContractBase = Omit<
                   readonly codecId: 'pg/text@1';
                   readonly nullable: true;
                 };
-                readonly audioStoragePath: {
+                readonly audioUrl: {
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
                   readonly nullable: true;
@@ -2607,26 +2513,6 @@ type ContractBase = Omit<
                   readonly codecId: 'pg/uuid@1';
                   readonly nullable: true;
                 };
-                readonly source: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly contactEmail: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
-                };
-                readonly contactPhone: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
-                };
-                readonly trackingToken: {
-                  readonly nativeType: 'uuid';
-                  readonly codecId: 'pg/uuid@1';
-                  readonly nullable: false;
-                };
                 readonly preferenceId: {
                   readonly nativeType: 'uuid';
                   readonly codecId: 'pg/uuid@1';
@@ -2667,7 +2553,6 @@ type ContractBase = Omit<
               primaryKey: { readonly columns: readonly ['id'] };
               uniques: readonly [
                 { readonly columns: readonly ['orderNumber'] },
-                { readonly columns: readonly ['trackingToken'] },
                 { readonly columns: readonly ['preferenceId'] },
               ];
               indexes: readonly [
@@ -2992,7 +2877,7 @@ type ContractBase = Omit<
                   readonly codecId: 'pg/text@1';
                   readonly nullable: true;
                 };
-                readonly imageStoragePath: {
+                readonly imageUrl: {
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
                   readonly nullable: true;
@@ -3205,17 +3090,7 @@ type ContractBase = Omit<
                 readonly userId: {
                   readonly nativeType: 'uuid';
                   readonly codecId: 'pg/uuid@1';
-                  readonly nullable: true;
-                };
-                readonly requesterName: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
-                };
-                readonly requesterEmail: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
+                  readonly nullable: false;
                 };
                 readonly orderId: {
                   readonly nativeType: 'uuid';
@@ -3329,75 +3204,6 @@ type ContractBase = Omit<
                   readonly target: {
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'payment';
-                    readonly columns: readonly ['id'];
-                  };
-                },
-              ];
-            };
-            readonly supportTicketAttachment: {
-              columns: {
-                readonly id: {
-                  readonly nativeType: 'uuid';
-                  readonly codecId: 'pg/uuid@1';
-                  readonly nullable: false;
-                };
-                readonly ticketId: {
-                  readonly nativeType: 'uuid';
-                  readonly codecId: 'pg/uuid@1';
-                  readonly nullable: false;
-                };
-                readonly type: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly fileName: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
-                };
-                readonly mimeType: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
-                };
-                readonly storagePath: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly sizeBytes: {
-                  readonly nativeType: 'int4';
-                  readonly codecId: 'pg/int4@1';
-                  readonly nullable: true;
-                };
-                readonly createdAt: {
-                  readonly nativeType: 'timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                  readonly nullable: false;
-                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
-                };
-              };
-              primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [];
-              indexes: readonly [
-                {
-                  readonly name: 'supportTicketAttachment_ticketId_idx_2fe526c3';
-                  readonly prefix: 'supportTicketAttachment_ticketId_idx';
-                  readonly columns: readonly ['ticketId'];
-                  readonly unique: false;
-                },
-              ];
-              foreignKeys: readonly [
-                {
-                  readonly source: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'supportTicketAttachment';
-                    readonly columns: readonly ['ticketId'];
-                  };
-                  readonly target: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'supportTicket';
                     readonly columns: readonly ['id'];
                   };
                 },
@@ -3644,10 +3450,6 @@ type ContractBase = Omit<
               readonly kind: 'valueSet';
               readonly values: readonly ['ORDER', 'PAYMENT', 'SUPPORT', 'SYSTEM', 'PROMOTION'];
             };
-            readonly OrderSource: {
-              readonly kind: 'valueSet';
-              readonly values: readonly ['WEB', 'MOBILE', 'KIOSK'];
-            };
             readonly OrderStatus: {
               readonly kind: 'valueSet';
               readonly values: readonly [
@@ -3699,10 +3501,6 @@ type ContractBase = Omit<
             readonly SupportTicketStatus: {
               readonly kind: 'valueSet';
               readonly values: readonly ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'];
-            };
-            readonly TicketAttachmentType: {
-              readonly kind: 'valueSet';
-              readonly values: readonly ['IMAGE', 'AUDIO', 'FILE'];
             };
           };
         };
@@ -3763,10 +3561,6 @@ type ContractBase = Omit<
     readonly supportTicket: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'SupportTicket';
-    };
-    readonly supportTicketAttachment: {
-      readonly namespace: 'public' & NamespaceId;
-      readonly model: 'SupportTicketAttachment';
     };
     readonly contactMessage: {
       readonly namespace: 'public' & NamespaceId;
@@ -3887,10 +3681,6 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
-              readonly markerImagePath: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
               readonly capacity: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
@@ -3968,7 +3758,6 @@ type ContractBase = Omit<
                 readonly column: { readonly column: 'column' };
                 readonly markerType: { readonly column: 'markerType' };
                 readonly markerValue: { readonly column: 'markerValue' };
-                readonly markerImagePath: { readonly column: 'markerImagePath' };
                 readonly capacity: { readonly column: 'capacity' };
                 readonly quantity: { readonly column: 'quantity' };
                 readonly reservedQuantity: { readonly column: 'reservedQuantity' };
@@ -4081,7 +3870,7 @@ type ContractBase = Omit<
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
-              readonly audioStoragePath: {
+              readonly audioUrl: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
@@ -4130,7 +3919,7 @@ type ContractBase = Omit<
                 readonly orderId: { readonly column: 'orderId' };
                 readonly type: { readonly column: 'type' };
                 readonly messageText: { readonly column: 'messageText' };
-                readonly audioStoragePath: { readonly column: 'audioStoragePath' };
+                readonly audioUrl: { readonly column: 'audioUrl' };
                 readonly qrToken: { readonly column: 'qrToken' };
                 readonly qrUrl: { readonly column: 'qrUrl' };
                 readonly createdAt: { readonly column: 'createdAt' };
@@ -4610,22 +4399,6 @@ type ContractBase = Omit<
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
               };
-              readonly source: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly contactEmail: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly contactPhone: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly trackingToken: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
-              };
               readonly preferenceId: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
@@ -4771,10 +4544,6 @@ type ContractBase = Omit<
                 readonly id: { readonly column: 'id' };
                 readonly orderNumber: { readonly column: 'orderNumber' };
                 readonly userId: { readonly column: 'userId' };
-                readonly source: { readonly column: 'source' };
-                readonly contactEmail: { readonly column: 'contactEmail' };
-                readonly contactPhone: { readonly column: 'contactPhone' };
-                readonly trackingToken: { readonly column: 'trackingToken' };
                 readonly preferenceId: { readonly column: 'preferenceId' };
                 readonly selectedPerfumeId: { readonly column: 'selectedPerfumeId' };
                 readonly unitPrice: { readonly column: 'unitPrice' };
@@ -5052,7 +4821,7 @@ type ContractBase = Omit<
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
-              readonly imageStoragePath: {
+              readonly imageUrl: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
@@ -5133,7 +4902,7 @@ type ContractBase = Omit<
                 readonly intensity: { readonly column: 'intensity' };
                 readonly longevity: { readonly column: 'longevity' };
                 readonly description: { readonly column: 'description' };
-                readonly imageStoragePath: { readonly column: 'imageStoragePath' };
+                readonly imageUrl: { readonly column: 'imageUrl' };
                 readonly active: { readonly column: 'active' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
@@ -5310,16 +5079,8 @@ type ContractBase = Omit<
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
               readonly userId: {
-                readonly nullable: true;
+                readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
-              };
-              readonly requesterName: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly requesterEmail: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
               readonly orderId: {
                 readonly nullable: true;
@@ -5372,17 +5133,6 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
-              readonly attachments: {
-                readonly to: {
-                  readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'SupportTicketAttachment';
-                };
-                readonly cardinality: '1:N';
-                readonly on: {
-                  readonly localFields: readonly ['id'];
-                  readonly targetFields: readonly ['ticketId'];
-                };
-              };
               readonly order: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -5410,7 +5160,7 @@ type ContractBase = Omit<
               readonly user: {
                 readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
                 readonly cardinality: 'N:1';
-                readonly nullable: true;
+                readonly nullable: false;
                 readonly on: {
                   readonly localFields: readonly ['userId'];
                   readonly targetFields: readonly ['id'];
@@ -5424,8 +5174,6 @@ type ContractBase = Omit<
                 readonly id: { readonly column: 'id' };
                 readonly ticketNumber: { readonly column: 'ticketNumber' };
                 readonly userId: { readonly column: 'userId' };
-                readonly requesterName: { readonly column: 'requesterName' };
-                readonly requesterEmail: { readonly column: 'requesterEmail' };
                 readonly orderId: { readonly column: 'orderId' };
                 readonly paymentId: { readonly column: 'paymentId' };
                 readonly category: { readonly column: 'category' };
@@ -5436,73 +5184,6 @@ type ContractBase = Omit<
                 readonly resolvedAt: { readonly column: 'resolvedAt' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
-              };
-            };
-          };
-          readonly SupportTicketAttachment: {
-            readonly fields: {
-              readonly id: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
-              };
-              readonly ticketId: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
-              };
-              readonly type: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly fileName: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly mimeType: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly storagePath: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly sizeBytes: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
-              };
-              readonly createdAt: {
-                readonly nullable: false;
-                readonly type: {
-                  readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                };
-              };
-            };
-            readonly relations: {
-              readonly ticket: {
-                readonly to: {
-                  readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'SupportTicket';
-                };
-                readonly cardinality: 'N:1';
-                readonly nullable: false;
-                readonly on: {
-                  readonly localFields: readonly ['ticketId'];
-                  readonly targetFields: readonly ['id'];
-                };
-              };
-            };
-            readonly storage: {
-              readonly table: 'supportTicketAttachment';
-              readonly namespaceId: 'public';
-              readonly fields: {
-                readonly id: { readonly column: 'id' };
-                readonly ticketId: { readonly column: 'ticketId' };
-                readonly type: { readonly column: 'type' };
-                readonly fileName: { readonly column: 'fileName' };
-                readonly mimeType: { readonly column: 'mimeType' };
-                readonly storagePath: { readonly column: 'storagePath' };
-                readonly sizeBytes: { readonly column: 'sizeBytes' };
-                readonly createdAt: { readonly column: 'createdAt' };
               };
             };
           };
@@ -5793,14 +5474,6 @@ type ContractBase = Omit<
               { readonly name: 'VOICE'; readonly value: 'VOICE' },
             ];
           };
-          readonly OrderSource: {
-            readonly codecId: 'pg/text@1';
-            readonly members: readonly [
-              { readonly name: 'WEB'; readonly value: 'WEB' },
-              { readonly name: 'MOBILE'; readonly value: 'MOBILE' },
-              { readonly name: 'KIOSK'; readonly value: 'KIOSK' },
-            ];
-          };
           readonly OrderStatus: {
             readonly codecId: 'pg/text@1';
             readonly members: readonly [
@@ -5899,14 +5572,6 @@ type ContractBase = Omit<
               { readonly name: 'IN_PROGRESS'; readonly value: 'IN_PROGRESS' },
               { readonly name: 'RESOLVED'; readonly value: 'RESOLVED' },
               { readonly name: 'CLOSED'; readonly value: 'CLOSED' },
-            ];
-          };
-          readonly TicketAttachmentType: {
-            readonly codecId: 'pg/text@1';
-            readonly members: readonly [
-              { readonly name: 'IMAGE'; readonly value: 'IMAGE' },
-              { readonly name: 'AUDIO'; readonly value: 'AUDIO' },
-              { readonly name: 'FILE'; readonly value: 'FILE' },
             ];
           };
           readonly ContactMessageStatus: {
@@ -6099,14 +5764,6 @@ type ContractBase = Omit<
           readonly ref: {
             readonly namespace: 'public';
             readonly table: 'order';
-            readonly column: 'trackingToken';
-          };
-          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
-        },
-        {
-          readonly ref: {
-            readonly namespace: 'public';
-            readonly table: 'order';
             readonly column: 'updatedAt';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
@@ -6186,14 +5843,6 @@ type ContractBase = Omit<
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
           readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
-        },
-        {
-          readonly ref: {
-            readonly namespace: 'public';
-            readonly table: 'supportTicketAttachment';
-            readonly column: 'id';
-          };
-          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
         },
         {
           readonly ref: {

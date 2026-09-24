@@ -1,0 +1,23 @@
+# Environment files / secrets
+.env
+.env.*
+!.env.example
+
+**/.env
+**/.env.*
+!**/.env.example
+
+# Local secret/config files
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Service account / credentials
+*service-account*.json
+*credentials*.json
+*secret*.json
+
+# Local debug files
+migrate-debug.txt
+**/migrate-debug.txt

@@ -4,8 +4,16 @@
   "target": "postgres",
   "profileHash": "3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2",
   "roots": {
+    "aiModel": {
+      "model": "AiModel",
+      "namespace": "public"
+    },
     "bin": {
       "model": "Bin",
+      "namespace": "public"
+    },
+    "contactMessage": {
+      "model": "ContactMessage",
       "namespace": "public"
     },
     "giftMessage": {
@@ -28,8 +36,20 @@
       "model": "InventoryMovement",
       "namespace": "public"
     },
+    "notification": {
+      "model": "Notification",
+      "namespace": "public"
+    },
     "order": {
       "model": "Order",
+      "namespace": "public"
+    },
+    "payment": {
+      "model": "Payment",
+      "namespace": "public"
+    },
+    "paymentEvent": {
+      "model": "PaymentEvent",
       "namespace": "public"
     },
     "perfume": {
@@ -44,8 +64,24 @@
       "model": "RecommendationRun",
       "namespace": "public"
     },
+    "supportTicket": {
+      "model": "SupportTicket",
+      "namespace": "public"
+    },
+    "supportTicketAttachment": {
+      "model": "SupportTicketAttachment",
+      "namespace": "public"
+    },
+    "systemSetting": {
+      "model": "SystemSetting",
+      "namespace": "public"
+    },
     "user": {
       "model": "User",
+      "namespace": "public"
+    },
+    "userSettings": {
+      "model": "UserSettings",
       "namespace": "public"
     }
   },
@@ -53,6 +89,65 @@
     "namespaces": {
       "public": {
         "enum": {
+          "AiModelPurpose": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "PERFUME_RECOMMENDATION",
+                "value": "PERFUME_RECOMMENDATION"
+              },
+              {
+                "name": "TEXT_GENERATION",
+                "value": "TEXT_GENERATION"
+              },
+              {
+                "name": "OTHER",
+                "value": "OTHER"
+              }
+            ]
+          },
+          "AiProvider": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "OPENAI",
+                "value": "OPENAI"
+              },
+              {
+                "name": "GOOGLE",
+                "value": "GOOGLE"
+              },
+              {
+                "name": "ANTHROPIC",
+                "value": "ANTHROPIC"
+              },
+              {
+                "name": "OTHER",
+                "value": "OTHER"
+              }
+            ]
+          },
+          "ContactMessageStatus": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "NEW",
+                "value": "NEW"
+              },
+              {
+                "name": "READ",
+                "value": "READ"
+              },
+              {
+                "name": "REPLIED",
+                "value": "REPLIED"
+              },
+              {
+                "name": "CLOSED",
+                "value": "CLOSED"
+              }
+            ]
+          },
           "HardwareJobStatus": {
             "codecId": "pg/text@1",
             "members": [
@@ -123,6 +218,23 @@
               }
             ]
           },
+          "LongevityPreference": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "SHORT",
+                "value": "SHORT"
+              },
+              {
+                "name": "MODERATE",
+                "value": "MODERATE"
+              },
+              {
+                "name": "LONG",
+                "value": "LONG"
+              }
+            ]
+          },
           "MarkerType": {
             "codecId": "pg/text@1",
             "members": [
@@ -153,12 +265,62 @@
               }
             ]
           },
+          "NotificationType": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "ORDER",
+                "value": "ORDER"
+              },
+              {
+                "name": "PAYMENT",
+                "value": "PAYMENT"
+              },
+              {
+                "name": "SUPPORT",
+                "value": "SUPPORT"
+              },
+              {
+                "name": "SYSTEM",
+                "value": "SYSTEM"
+              },
+              {
+                "name": "PROMOTION",
+                "value": "PROMOTION"
+              }
+            ]
+          },
+          "OrderSource": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "WEB",
+                "value": "WEB"
+              },
+              {
+                "name": "MOBILE",
+                "value": "MOBILE"
+              },
+              {
+                "name": "KIOSK",
+                "value": "KIOSK"
+              }
+            ]
+          },
           "OrderStatus": {
             "codecId": "pg/text@1",
             "members": [
               {
                 "name": "CREATED",
                 "value": "CREATED"
+              },
+              {
+                "name": "PENDING_PAYMENT",
+                "value": "PENDING_PAYMENT"
+              },
+              {
+                "name": "PAID",
+                "value": "PAID"
               },
               {
                 "name": "QUEUED",
@@ -182,33 +344,45 @@
               }
             ]
           },
-          "PerfumeGender": {
+          "PaymentProvider": {
             "codecId": "pg/text@1",
             "members": [
               {
-                "name": "MEN",
-                "value": "MEN"
-              },
-              {
-                "name": "WOMEN",
-                "value": "WOMEN"
-              },
-              {
-                "name": "UNISEX",
-                "value": "UNISEX"
+                "name": "STRIPE",
+                "value": "STRIPE"
               }
             ]
           },
-          "RecipientGender": {
+          "PaymentStatus": {
             "codecId": "pg/text@1",
             "members": [
               {
-                "name": "MALE",
-                "value": "MALE"
+                "name": "PENDING",
+                "value": "PENDING"
               },
               {
-                "name": "FEMALE",
-                "value": "FEMALE"
+                "name": "PROCESSING",
+                "value": "PROCESSING"
+              },
+              {
+                "name": "PAID",
+                "value": "PAID"
+              },
+              {
+                "name": "FAILED",
+                "value": "FAILED"
+              },
+              {
+                "name": "CANCELLED",
+                "value": "CANCELLED"
+              },
+              {
+                "name": "REFUNDED",
+                "value": "REFUNDED"
+              },
+              {
+                "name": "PARTIALLY_REFUNDED",
+                "value": "PARTIALLY_REFUNDED"
               }
             ]
           },
@@ -224,9 +398,232 @@
                 "value": "ADMIN"
               }
             ]
+          },
+          "ScentIntensity": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "LIGHT",
+                "value": "LIGHT"
+              },
+              {
+                "name": "MEDIUM",
+                "value": "MEDIUM"
+              },
+              {
+                "name": "STRONG",
+                "value": "STRONG"
+              }
+            ]
+          },
+          "SupportTicketCategory": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "PAYMENT",
+                "value": "PAYMENT"
+              },
+              {
+                "name": "ORDER",
+                "value": "ORDER"
+              },
+              {
+                "name": "ACCOUNT",
+                "value": "ACCOUNT"
+              },
+              {
+                "name": "HARDWARE",
+                "value": "HARDWARE"
+              },
+              {
+                "name": "DELIVERY",
+                "value": "DELIVERY"
+              },
+              {
+                "name": "OTHER",
+                "value": "OTHER"
+              }
+            ]
+          },
+          "SupportTicketStatus": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "OPEN",
+                "value": "OPEN"
+              },
+              {
+                "name": "IN_PROGRESS",
+                "value": "IN_PROGRESS"
+              },
+              {
+                "name": "RESOLVED",
+                "value": "RESOLVED"
+              },
+              {
+                "name": "CLOSED",
+                "value": "CLOSED"
+              }
+            ]
+          },
+          "TicketAttachmentType": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "IMAGE",
+                "value": "IMAGE"
+              },
+              {
+                "name": "AUDIO",
+                "value": "AUDIO"
+              },
+              {
+                "name": "FILE",
+                "value": "FILE"
+              }
+            ]
           }
         },
         "models": {
+          "AiModel": {
+            "fields": {
+              "configuration": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/jsonb@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "enabled": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "modelIdentifier": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "priority": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "provider": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "AiProvider",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "purpose": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "AiModelPurpose",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "recommendationRuns": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "aiModelId"
+                  ]
+                },
+                "to": {
+                  "model": "RecommendationRun",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "configuration": {
+                  "column": "configuration"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "enabled": {
+                  "column": "enabled"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "modelIdentifier": {
+                  "column": "modelIdentifier"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "priority": {
+                  "column": "priority"
+                },
+                "provider": {
+                  "column": "provider"
+                },
+                "purpose": {
+                  "column": "purpose"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "aiModel"
+            }
+          },
           "Bin": {
             "fields": {
               "capacity": {
@@ -261,6 +658,13 @@
                 "nullable": false,
                 "type": {
                   "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "markerImagePath": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
                   "kind": "scalar"
                 }
               },
@@ -385,6 +789,9 @@
                 "id": {
                   "column": "id"
                 },
+                "markerImagePath": {
+                  "column": "markerImagePath"
+                },
                 "markerType": {
                   "column": "markerType"
                 },
@@ -411,9 +818,153 @@
               "table": "bin"
             }
           },
+          "ContactMessage": {
+            "fields": {
+              "adminReply": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "email": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "message": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "repliedAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "ContactMessageStatus",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "subject": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "user": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "adminReply": {
+                  "column": "adminReply"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "email": {
+                  "column": "email"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "message": {
+                  "column": "message"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "repliedAt": {
+                  "column": "repliedAt"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "subject": {
+                  "column": "subject"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "contactMessage"
+            }
+          },
           "GiftMessage": {
             "fields": {
-              "audioUrl": {
+              "audioStoragePath": {
                 "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
@@ -503,8 +1054,8 @@
             },
             "storage": {
               "fields": {
-                "audioUrl": {
-                  "column": "audioUrl"
+                "audioStoragePath": {
+                  "column": "audioStoragePath"
                 },
                 "createdAt": {
                   "column": "createdAt"
@@ -538,7 +1089,7 @@
           "GiftPreference": {
             "fields": {
               "age": {
-                "nullable": false,
+                "nullable": true,
                 "type": {
                   "codecId": "pg/int4@1",
                   "kind": "scalar"
@@ -562,6 +1113,13 @@
                   "kind": "scalar"
                 }
               },
+              "description": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "fragrancePreferences": {
                 "many": true,
                 "nullable": false,
@@ -570,17 +1128,11 @@
                   "kind": "scalar"
                 }
               },
-              "gender": {
-                "nullable": false,
+              "fragranceStyle": {
+                "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
-                },
-                "valueSet": {
-                  "entityKind": "enum",
-                  "entityName": "RecipientGender",
-                  "namespaceId": "public",
-                  "plane": "domain"
                 }
               },
               "id": {
@@ -590,7 +1142,33 @@
                   "kind": "scalar"
                 }
               },
-              "interests": {
+              "intensity": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "ScentIntensity",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "longevity": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "LongevityPreference",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "preferredNotes": {
                 "many": true,
                 "nullable": false,
                 "type": {
@@ -599,7 +1177,7 @@
                 }
               },
               "recipientName": {
-                "nullable": true,
+                "nullable": false,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
@@ -673,17 +1251,26 @@
                 "createdAt": {
                   "column": "createdAt"
                 },
+                "description": {
+                  "column": "description"
+                },
                 "fragrancePreferences": {
                   "column": "fragrancePreferences"
                 },
-                "gender": {
-                  "column": "gender"
+                "fragranceStyle": {
+                  "column": "fragranceStyle"
                 },
                 "id": {
                   "column": "id"
                 },
-                "interests": {
-                  "column": "interests"
+                "intensity": {
+                  "column": "intensity"
+                },
+                "longevity": {
+                  "column": "longevity"
+                },
+                "preferredNotes": {
+                  "column": "preferredNotes"
                 },
                 "recipientName": {
                   "column": "recipientName"
@@ -1121,8 +1708,162 @@
               "table": "inventoryMovement"
             }
           },
+          "Notification": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "message": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "orderId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "read": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "readAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "title": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "type": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "NotificationType",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "userId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "order": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "orderId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Order",
+                  "namespace": "public"
+                }
+              },
+              "user": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "message": {
+                  "column": "message"
+                },
+                "orderId": {
+                  "column": "orderId"
+                },
+                "read": {
+                  "column": "read"
+                },
+                "readAt": {
+                  "column": "readAt"
+                },
+                "title": {
+                  "column": "title"
+                },
+                "type": {
+                  "column": "type"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "notification"
+            }
+          },
           "Order": {
             "fields": {
+              "contactEmail": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "contactPhone": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "createdAt": {
                 "nullable": false,
                 "type": {
@@ -1158,6 +1899,19 @@
                   "kind": "scalar"
                 }
               },
+              "source": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "OrderSource",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
               "status": {
                 "nullable": false,
                 "type": {
@@ -1169,6 +1923,13 @@
                   "entityName": "OrderStatus",
                   "namespaceId": "public",
                   "plane": "domain"
+                }
+              },
+              "trackingToken": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
                 }
               },
               "unitPrice": {
@@ -1245,6 +2006,36 @@
                   "namespace": "public"
                 }
               },
+              "notifications": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "orderId"
+                  ]
+                },
+                "to": {
+                  "model": "Notification",
+                  "namespace": "public"
+                }
+              },
+              "payments": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "orderId"
+                  ]
+                },
+                "to": {
+                  "model": "Payment",
+                  "namespace": "public"
+                }
+              },
               "preference": {
                 "cardinality": "N:1",
                 "nullable": false,
@@ -1277,6 +2068,21 @@
                   "namespace": "public"
                 }
               },
+              "supportTickets": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "orderId"
+                  ]
+                },
+                "to": {
+                  "model": "SupportTicket",
+                  "namespace": "public"
+                }
+              },
               "user": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -1296,6 +2102,12 @@
             },
             "storage": {
               "fields": {
+                "contactEmail": {
+                  "column": "contactEmail"
+                },
+                "contactPhone": {
+                  "column": "contactPhone"
+                },
                 "createdAt": {
                   "column": "createdAt"
                 },
@@ -1311,8 +2123,14 @@
                 "selectedPerfumeId": {
                   "column": "selectedPerfumeId"
                 },
+                "source": {
+                  "column": "source"
+                },
                 "status": {
                   "column": "status"
+                },
+                "trackingToken": {
+                  "column": "trackingToken"
                 },
                 "unitPrice": {
                   "column": "unitPrice"
@@ -1326,6 +2144,354 @@
               },
               "namespaceId": "public",
               "table": "order"
+            }
+          },
+          "Payment": {
+            "fields": {
+              "amount": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 10,
+                    "scale": 2
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "currency": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "failureCode": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "failureMessage": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "orderId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "paidAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "provider": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "PaymentProvider",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "refundedAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "PaymentStatus",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "stripeCheckoutSessionId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "stripePaymentIntentId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "events": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "paymentId"
+                  ]
+                },
+                "to": {
+                  "model": "PaymentEvent",
+                  "namespace": "public"
+                }
+              },
+              "order": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "orderId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Order",
+                  "namespace": "public"
+                }
+              },
+              "supportTickets": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "paymentId"
+                  ]
+                },
+                "to": {
+                  "model": "SupportTicket",
+                  "namespace": "public"
+                }
+              },
+              "user": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "amount": {
+                  "column": "amount"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "currency": {
+                  "column": "currency"
+                },
+                "failureCode": {
+                  "column": "failureCode"
+                },
+                "failureMessage": {
+                  "column": "failureMessage"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "orderId": {
+                  "column": "orderId"
+                },
+                "paidAt": {
+                  "column": "paidAt"
+                },
+                "provider": {
+                  "column": "provider"
+                },
+                "refundedAt": {
+                  "column": "refundedAt"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "stripeCheckoutSessionId": {
+                  "column": "stripeCheckoutSessionId"
+                },
+                "stripePaymentIntentId": {
+                  "column": "stripePaymentIntentId"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "payment"
+            }
+          },
+          "PaymentEvent": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "eventType": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "payload": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/jsonb@1",
+                  "kind": "scalar"
+                }
+              },
+              "paymentId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "processed": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "processedAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "providerEventId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "payment": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "paymentId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Payment",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "eventType": {
+                  "column": "eventType"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "payload": {
+                  "column": "payload"
+                },
+                "paymentId": {
+                  "column": "paymentId"
+                },
+                "processed": {
+                  "column": "processed"
+                },
+                "processedAt": {
+                  "column": "processedAt"
+                },
+                "providerEventId": {
+                  "column": "providerEventId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "paymentEvent"
             }
           },
           "Perfume": {
@@ -1372,11 +2538,37 @@
                   "kind": "scalar"
                 }
               },
-              "imageUrl": {
+              "imageStoragePath": {
                 "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
+                }
+              },
+              "intensity": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "ScentIntensity",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "longevity": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "LongevityPreference",
+                  "namespaceId": "public",
+                  "plane": "domain"
                 }
               },
               "name": {
@@ -1418,19 +2610,6 @@
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
-                }
-              },
-              "targetGender": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                },
-                "valueSet": {
-                  "entityKind": "enum",
-                  "entityName": "PerfumeGender",
-                  "namespaceId": "public",
-                  "plane": "domain"
                 }
               },
               "updatedAt": {
@@ -1523,8 +2702,14 @@
                 "id": {
                   "column": "id"
                 },
-                "imageUrl": {
-                  "column": "imageUrl"
+                "imageStoragePath": {
+                  "column": "imageStoragePath"
+                },
+                "intensity": {
+                  "column": "intensity"
+                },
+                "longevity": {
+                  "column": "longevity"
                 },
                 "name": {
                   "column": "name"
@@ -1540,9 +2725,6 @@
                 },
                 "tags": {
                   "column": "tags"
-                },
-                "targetGender": {
-                  "column": "targetGender"
                 },
                 "updatedAt": {
                   "column": "updatedAt"
@@ -1668,6 +2850,13 @@
           },
           "RecommendationRun": {
             "fields": {
+              "aiModelId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
               "createdAt": {
                 "nullable": false,
                 "type": {
@@ -1712,6 +2901,22 @@
               }
             },
             "relations": {
+              "aiModel": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "aiModelId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "AiModel",
+                  "namespace": "public"
+                }
+              },
               "items": {
                 "cardinality": "1:N",
                 "on": {
@@ -1746,6 +2951,9 @@
             },
             "storage": {
               "fields": {
+                "aiModelId": {
+                  "column": "aiModelId"
+                },
                 "createdAt": {
                   "column": "createdAt"
                 },
@@ -1769,10 +2977,439 @@
               "table": "recommendationRun"
             }
           },
+          "SupportTicket": {
+            "fields": {
+              "adminReply": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "category": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "SupportTicketCategory",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "message": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "orderId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "paymentId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "requesterEmail": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "requesterName": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "resolvedAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "SupportTicketStatus",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "subject": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "ticketNumber": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "attachments": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "ticketId"
+                  ]
+                },
+                "to": {
+                  "model": "SupportTicketAttachment",
+                  "namespace": "public"
+                }
+              },
+              "order": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "orderId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Order",
+                  "namespace": "public"
+                }
+              },
+              "payment": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "paymentId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Payment",
+                  "namespace": "public"
+                }
+              },
+              "user": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "adminReply": {
+                  "column": "adminReply"
+                },
+                "category": {
+                  "column": "category"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "message": {
+                  "column": "message"
+                },
+                "orderId": {
+                  "column": "orderId"
+                },
+                "paymentId": {
+                  "column": "paymentId"
+                },
+                "requesterEmail": {
+                  "column": "requesterEmail"
+                },
+                "requesterName": {
+                  "column": "requesterName"
+                },
+                "resolvedAt": {
+                  "column": "resolvedAt"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "subject": {
+                  "column": "subject"
+                },
+                "ticketNumber": {
+                  "column": "ticketNumber"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "supportTicket"
+            }
+          },
+          "SupportTicketAttachment": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fileName": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "mimeType": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "sizeBytes": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "storagePath": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "ticketId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "type": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "TicketAttachmentType",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "ticket": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "ticketId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "SupportTicket",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "fileName": {
+                  "column": "fileName"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "mimeType": {
+                  "column": "mimeType"
+                },
+                "sizeBytes": {
+                  "column": "sizeBytes"
+                },
+                "storagePath": {
+                  "column": "storagePath"
+                },
+                "ticketId": {
+                  "column": "ticketId"
+                },
+                "type": {
+                  "column": "type"
+                }
+              },
+              "namespaceId": "public",
+              "table": "supportTicketAttachment"
+            }
+          },
+          "SystemSetting": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "description": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "key": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "value": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/jsonb@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {},
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "description": {
+                  "column": "description"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "key": {
+                  "column": "key"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "value": {
+                  "column": "value"
+                }
+              },
+              "namespaceId": "public",
+              "table": "systemSetting"
+            }
+          },
           "User": {
             "fields": {
               "createdAt": {
                 "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "deletedAt": {
+                "nullable": true,
                 "type": {
                   "codecId": "pg/timestamptz-temporal@1",
                   "kind": "scalar"
@@ -1821,6 +3458,36 @@
               }
             },
             "relations": {
+              "contactMessages": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "userId"
+                  ]
+                },
+                "to": {
+                  "model": "ContactMessage",
+                  "namespace": "public"
+                }
+              },
+              "notifications": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "userId"
+                  ]
+                },
+                "to": {
+                  "model": "Notification",
+                  "namespace": "public"
+                }
+              },
               "orders": {
                 "cardinality": "1:N",
                 "on": {
@@ -1833,6 +3500,21 @@
                 },
                 "to": {
                   "model": "Order",
+                  "namespace": "public"
+                }
+              },
+              "payments": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "userId"
+                  ]
+                },
+                "to": {
+                  "model": "Payment",
                   "namespace": "public"
                 }
               },
@@ -1850,12 +3532,46 @@
                   "model": "GiftPreference",
                   "namespace": "public"
                 }
+              },
+              "settings": {
+                "cardinality": "1:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "userId"
+                  ]
+                },
+                "to": {
+                  "model": "UserSettings",
+                  "namespace": "public"
+                }
+              },
+              "supportTickets": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "userId"
+                  ]
+                },
+                "to": {
+                  "model": "SupportTicket",
+                  "namespace": "public"
+                }
               }
             },
             "storage": {
               "fields": {
                 "createdAt": {
                   "column": "createdAt"
+                },
+                "deletedAt": {
+                  "column": "deletedAt"
                 },
                 "email": {
                   "column": "email"
@@ -1876,6 +3592,144 @@
               "namespaceId": "public",
               "table": "user"
             }
+          },
+          "UserSettings": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "emailNotifications": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "language": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "marketingNotifications": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "orderUpdates": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "paymentUpdates": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "pushNotifications": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "supportUpdates": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "user": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "emailNotifications": {
+                  "column": "emailNotifications"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "language": {
+                  "column": "language"
+                },
+                "marketingNotifications": {
+                  "column": "marketingNotifications"
+                },
+                "orderUpdates": {
+                  "column": "orderUpdates"
+                },
+                "paymentUpdates": {
+                  "column": "paymentUpdates"
+                },
+                "pushNotifications": {
+                  "column": "pushNotifications"
+                },
+                "supportUpdates": {
+                  "column": "supportUpdates"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "userSettings"
+            }
           }
         }
       }
@@ -1885,7 +3739,219 @@
     "namespaces": {
       "public": {
         "entries": {
+          "rls": {
+            "aiModel": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "aiModel"
+            },
+            "bin": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "bin"
+            },
+            "contactMessage": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "contactMessage"
+            },
+            "giftMessage": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "giftMessage"
+            },
+            "giftPreference": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "giftPreference"
+            },
+            "hardwareJob": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "hardwareJob"
+            },
+            "hardwareJobEvent": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "hardwareJobEvent"
+            },
+            "inventoryMovement": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "inventoryMovement"
+            },
+            "notification": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "notification"
+            },
+            "order": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "order"
+            },
+            "payment": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "payment"
+            },
+            "paymentEvent": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "paymentEvent"
+            },
+            "perfume": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "perfume"
+            },
+            "recommendationItem": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "recommendationItem"
+            },
+            "recommendationRun": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "recommendationRun"
+            },
+            "supportTicket": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "supportTicket"
+            },
+            "supportTicketAttachment": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "supportTicketAttachment"
+            },
+            "systemSetting": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "systemSetting"
+            },
+            "user": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "user"
+            },
+            "userSettings": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "userSettings"
+            }
+          },
           "table": {
+            "aiModel": {
+              "checks": [
+                {
+                  "expression": "\"provider\" IN ('OPENAI', 'GOOGLE', 'ANTHROPIC', 'OTHER')",
+                  "name": "aiModel_provider_check_3e7d71a2",
+                  "prefix": "aiModel_provider_check"
+                },
+                {
+                  "expression": "\"purpose\" IN ('PERFUME_RECOMMENDATION', 'TEXT_GENERATION', 'OTHER')",
+                  "name": "aiModel_purpose_check_0b3d5ef7",
+                  "prefix": "aiModel_purpose_check"
+                }
+              ],
+              "columns": {
+                "configuration": {
+                  "codecId": "pg/jsonb@1",
+                  "nativeType": "jsonb",
+                  "nullable": true
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "enabled": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "modelIdentifier": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "priority": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 1
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "provider": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "AiProvider",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "purpose": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "PERFUME_RECOMMENDATION"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "AiModelPurpose",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "provider",
+                    "modelIdentifier",
+                    "purpose"
+                  ]
+                }
+              ]
+            },
             "bin": {
               "checks": [
                 {
@@ -1923,6 +3989,11 @@
                   "codecId": "pg/uuid@1",
                   "nativeType": "uuid",
                   "nullable": false
+                },
+                "markerImagePath": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
                 },
                 "markerType": {
                   "codecId": "pg/text@1",
@@ -2031,6 +4102,121 @@
                 }
               ]
             },
+            "contactMessage": {
+              "checks": [
+                {
+                  "expression": "\"status\" IN ('NEW', 'READ', 'REPLIED', 'CLOSED')",
+                  "name": "contactMessage_status_check_94699d1b",
+                  "prefix": "contactMessage_status_check"
+                }
+              ],
+              "columns": {
+                "adminReply": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "email": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "message": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "repliedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "NEW"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "ContactMessageStatus",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "subject": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "userId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "setNull",
+                  "source": {
+                    "columns": [
+                      "userId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "contactMessage"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "user"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "userId"
+                  ],
+                  "name": "contactMessage_userId_idx_a489d58a",
+                  "prefix": "contactMessage_userId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
             "giftMessage": {
               "checks": [
                 {
@@ -2040,7 +4226,7 @@
                 }
               ],
               "columns": {
-                "audioUrl": {
+                "audioStoragePath": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
                   "nullable": true
@@ -2146,21 +4332,26 @@
                   "prefix": "giftPreference_fragrancePreferences_elem_not_null"
                 },
                 {
-                  "expression": "\"gender\" IN ('MALE', 'FEMALE')",
-                  "name": "giftPreference_gender_check_9e8dd636",
-                  "prefix": "giftPreference_gender_check"
+                  "expression": "\"intensity\" IN ('LIGHT', 'MEDIUM', 'STRONG')",
+                  "name": "giftPreference_intensity_check_0fe95d92",
+                  "prefix": "giftPreference_intensity_check"
                 },
                 {
-                  "expression": "array_position(\"interests\", NULL) IS NULL",
-                  "name": "giftPreference_interests_elem_not_null_4b23e016",
-                  "prefix": "giftPreference_interests_elem_not_null"
+                  "expression": "\"longevity\" IN ('SHORT', 'MODERATE', 'LONG')",
+                  "name": "giftPreference_longevity_check_d7b30714",
+                  "prefix": "giftPreference_longevity_check"
+                },
+                {
+                  "expression": "array_position(\"preferredNotes\", NULL) IS NULL",
+                  "name": "giftPreference_preferredNotes_elem_not_null_0c007a99",
+                  "prefix": "giftPreference_preferredNotes_elem_not_null"
                 }
               ],
               "columns": {
                 "age": {
                   "codecId": "pg/int4@1",
                   "nativeType": "int4",
-                  "nullable": false
+                  "nullable": true
                 },
                 "budget": {
                   "codecId": "pg/numeric@1",
@@ -2180,29 +4371,50 @@
                   "nativeType": "timestamptz",
                   "nullable": false
                 },
+                "description": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
                 "fragrancePreferences": {
                   "codecId": "pg/text@1",
                   "many": true,
                   "nativeType": "text",
                   "nullable": false
                 },
-                "gender": {
+                "fragranceStyle": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
-                  "nullable": false,
-                  "valueSet": {
-                    "entityKind": "valueSet",
-                    "entityName": "RecipientGender",
-                    "namespaceId": "public",
-                    "plane": "storage"
-                  }
+                  "nullable": true
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
                   "nativeType": "uuid",
                   "nullable": false
                 },
-                "interests": {
+                "intensity": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "ScentIntensity",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "longevity": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "LongevityPreference",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "preferredNotes": {
                   "codecId": "pg/text@1",
                   "many": true,
                   "nativeType": "text",
@@ -2211,7 +4423,7 @@
                 "recipientName": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
-                  "nullable": true
+                  "nullable": false
                 },
                 "userId": {
                   "codecId": "pg/uuid@1",
@@ -2639,15 +4851,160 @@
               },
               "uniques": []
             },
+            "notification": {
+              "checks": [
+                {
+                  "expression": "\"type\" IN ('ORDER', 'PAYMENT', 'SUPPORT', 'SYSTEM', 'PROMOTION')",
+                  "name": "notification_type_check_80a5ec20",
+                  "prefix": "notification_type_check"
+                }
+              ],
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "message": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "orderId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "read": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "readAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "title": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "type": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "NotificationType",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "userId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "userId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "notification"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "user"
+                  }
+                },
+                {
+                  "onDelete": "setNull",
+                  "source": {
+                    "columns": [
+                      "orderId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "notification"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "order"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "orderId"
+                  ],
+                  "name": "notification_orderId_idx_d284871b",
+                  "prefix": "notification_orderId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "userId"
+                  ],
+                  "name": "notification_userId_idx_a489d58a",
+                  "prefix": "notification_userId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
             "order": {
               "checks": [
                 {
-                  "expression": "\"status\" IN ('CREATED', 'QUEUED', 'PROCESSING', 'COMPLETED', 'FAILED', 'CANCELLED')",
-                  "name": "order_status_check_8be91940",
+                  "expression": "\"source\" IN ('WEB', 'MOBILE', 'KIOSK')",
+                  "name": "order_source_check_aac48fb5",
+                  "prefix": "order_source_check"
+                },
+                {
+                  "expression": "\"status\" IN ('CREATED', 'PENDING_PAYMENT', 'PAID', 'QUEUED', 'PROCESSING', 'COMPLETED', 'FAILED', 'CANCELLED')",
+                  "name": "order_status_check_64e22534",
                   "prefix": "order_status_check"
                 }
               ],
               "columns": {
+                "contactEmail": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "contactPhone": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
                 "createdAt": {
                   "codecId": "pg/timestamptz-temporal@1",
                   "default": {
@@ -2677,6 +5034,17 @@
                   "nativeType": "uuid",
                   "nullable": false
                 },
+                "source": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "OrderSource",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
                 "status": {
                   "codecId": "pg/text@1",
                   "default": {
@@ -2691,6 +5059,11 @@
                     "namespaceId": "public",
                     "plane": "storage"
                   }
+                },
+                "trackingToken": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
                 },
                 "unitPrice": {
                   "codecId": "pg/numeric@1",
@@ -2794,13 +5167,314 @@
                 },
                 {
                   "columns": [
+                    "trackingToken"
+                  ]
+                },
+                {
+                  "columns": [
                     "preferenceId"
+                  ]
+                }
+              ]
+            },
+            "payment": {
+              "checks": [
+                {
+                  "expression": "\"provider\" IN ('STRIPE')",
+                  "name": "payment_provider_check_3510eb02",
+                  "prefix": "payment_provider_check"
+                },
+                {
+                  "expression": "\"status\" IN ('PENDING', 'PROCESSING', 'PAID', 'FAILED', 'CANCELLED', 'REFUNDED', 'PARTIALLY_REFUNDED')",
+                  "name": "payment_status_check_e8b7dfa8",
+                  "prefix": "payment_status_check"
+                }
+              ],
+              "columns": {
+                "amount": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 10,
+                    "scale": 2
+                  }
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "currency": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "USD"
+                  },
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "failureCode": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "failureMessage": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "orderId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "paidAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "provider": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "STRIPE"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "PaymentProvider",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "refundedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "PENDING"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "PaymentStatus",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "stripeCheckoutSessionId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "stripePaymentIntentId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "userId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "setNull",
+                  "source": {
+                    "columns": [
+                      "userId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "payment"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "user"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "orderId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "payment"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "order"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "orderId"
+                  ],
+                  "name": "payment_orderId_idx_d284871b",
+                  "prefix": "payment_orderId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "userId"
+                  ],
+                  "name": "payment_userId_idx_a489d58a",
+                  "prefix": "payment_userId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "stripePaymentIntentId"
+                  ]
+                },
+                {
+                  "columns": [
+                    "stripeCheckoutSessionId"
+                  ]
+                }
+              ]
+            },
+            "paymentEvent": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "eventType": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "payload": {
+                  "codecId": "pg/jsonb@1",
+                  "nativeType": "jsonb",
+                  "nullable": true
+                },
+                "paymentId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "processed": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "processedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "providerEventId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "paymentId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "paymentEvent"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "payment"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "paymentId"
+                  ],
+                  "name": "paymentEvent_paymentId_idx_b2fe9a10",
+                  "prefix": "paymentEvent_paymentId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "providerEventId"
                   ]
                 }
               ]
             },
             "perfume": {
               "checks": [
+                {
+                  "expression": "\"intensity\" IN ('LIGHT', 'MEDIUM', 'STRONG')",
+                  "name": "perfume_intensity_check_0fe95d92",
+                  "prefix": "perfume_intensity_check"
+                },
+                {
+                  "expression": "\"longevity\" IN ('SHORT', 'MODERATE', 'LONG')",
+                  "name": "perfume_longevity_check_d7b30714",
+                  "prefix": "perfume_longevity_check"
+                },
                 {
                   "expression": "array_position(\"notes\", NULL) IS NULL",
                   "name": "perfume_notes_elem_not_null_f914e30f",
@@ -2810,11 +5484,6 @@
                   "expression": "array_position(\"tags\", NULL) IS NULL",
                   "name": "perfume_tags_elem_not_null_aecbe9e2",
                   "prefix": "perfume_tags_elem_not_null"
-                },
-                {
-                  "expression": "\"targetGender\" IN ('MEN', 'WOMEN', 'UNISEX')",
-                  "name": "perfume_targetGender_check_852aef0b",
-                  "prefix": "perfume_targetGender_check"
                 }
               ],
               "columns": {
@@ -2856,10 +5525,32 @@
                   "nativeType": "uuid",
                   "nullable": false
                 },
-                "imageUrl": {
+                "imageStoragePath": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
                   "nullable": true
+                },
+                "intensity": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "ScentIntensity",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "longevity": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "LongevityPreference",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
                 },
                 "name": {
                   "codecId": "pg/text@1",
@@ -2891,17 +5582,6 @@
                   "many": true,
                   "nativeType": "text",
                   "nullable": false
-                },
-                "targetGender": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false,
-                  "valueSet": {
-                    "entityKind": "valueSet",
-                    "entityName": "PerfumeGender",
-                    "namespaceId": "public",
-                    "plane": "storage"
-                  }
                 },
                 "updatedAt": {
                   "codecId": "pg/timestamptz-temporal@1",
@@ -3041,6 +5721,11 @@
             },
             "recommendationRun": {
               "columns": {
+                "aiModelId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
                 "createdAt": {
                   "codecId": "pg/timestamptz-temporal@1",
                   "default": {
@@ -3093,9 +5778,34 @@
                     "namespaceId": "public",
                     "tableName": "giftPreference"
                   }
+                },
+                {
+                  "onDelete": "setNull",
+                  "source": {
+                    "columns": [
+                      "aiModelId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "recommendationRun"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "aiModel"
+                  }
                 }
               ],
               "indexes": [
+                {
+                  "columns": [
+                    "aiModelId"
+                  ],
+                  "name": "recommendationRun_aiModelId_idx_10903664",
+                  "prefix": "recommendationRun_aiModelId_idx",
+                  "unique": false
+                },
                 {
                   "columns": [
                     "preferenceId"
@@ -3111,6 +5821,356 @@
                 ]
               },
               "uniques": []
+            },
+            "supportTicket": {
+              "checks": [
+                {
+                  "expression": "\"category\" IN ('PAYMENT', 'ORDER', 'ACCOUNT', 'HARDWARE', 'DELIVERY', 'OTHER')",
+                  "name": "supportTicket_category_check_96b6ed6b",
+                  "prefix": "supportTicket_category_check"
+                },
+                {
+                  "expression": "\"status\" IN ('OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED')",
+                  "name": "supportTicket_status_check_8580ec13",
+                  "prefix": "supportTicket_status_check"
+                }
+              ],
+              "columns": {
+                "adminReply": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "category": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "SupportTicketCategory",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "message": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "orderId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "paymentId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "requesterEmail": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "requesterName": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "resolvedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "OPEN"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "SupportTicketStatus",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "subject": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "ticketNumber": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "userId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "setNull",
+                  "source": {
+                    "columns": [
+                      "userId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "supportTicket"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "user"
+                  }
+                },
+                {
+                  "onDelete": "setNull",
+                  "source": {
+                    "columns": [
+                      "orderId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "supportTicket"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "order"
+                  }
+                },
+                {
+                  "onDelete": "setNull",
+                  "source": {
+                    "columns": [
+                      "paymentId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "supportTicket"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "payment"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "orderId"
+                  ],
+                  "name": "supportTicket_orderId_idx_d284871b",
+                  "prefix": "supportTicket_orderId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "paymentId"
+                  ],
+                  "name": "supportTicket_paymentId_idx_b2fe9a10",
+                  "prefix": "supportTicket_paymentId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "userId"
+                  ],
+                  "name": "supportTicket_userId_idx_a489d58a",
+                  "prefix": "supportTicket_userId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "ticketNumber"
+                  ]
+                }
+              ]
+            },
+            "supportTicketAttachment": {
+              "checks": [
+                {
+                  "expression": "\"type\" IN ('IMAGE', 'AUDIO', 'FILE')",
+                  "name": "supportTicketAttachment_type_check_0cebd608",
+                  "prefix": "supportTicketAttachment_type_check"
+                }
+              ],
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fileName": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "mimeType": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "sizeBytes": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "storagePath": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "ticketId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "type": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "TicketAttachmentType",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "ticketId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "supportTicketAttachment"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "supportTicket"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "ticketId"
+                  ],
+                  "name": "supportTicketAttachment_ticketId_idx_2fe526c3",
+                  "prefix": "supportTicketAttachment_ticketId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "systemSetting": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "description": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "key": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "value": {
+                  "codecId": "pg/jsonb@1",
+                  "nativeType": "jsonb",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "key"
+                  ]
+                }
+              ]
             },
             "user": {
               "checks": [
@@ -3129,6 +6189,11 @@
                   },
                   "nativeType": "timestamptz",
                   "nullable": false
+                },
+                "deletedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
                 },
                 "email": {
                   "codecId": "pg/text@1",
@@ -3180,9 +6245,158 @@
                   ]
                 }
               ]
+            },
+            "userSettings": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "emailNotifications": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "language": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "en"
+                  },
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "marketingNotifications": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "orderUpdates": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "paymentUpdates": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "pushNotifications": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "supportUpdates": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "userId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "userId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "userSettings"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "user"
+                  }
+                }
+              ],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "userId"
+                  ]
+                }
+              ]
             }
           },
           "valueSet": {
+            "AiModelPurpose": {
+              "kind": "valueSet",
+              "values": [
+                "PERFUME_RECOMMENDATION",
+                "TEXT_GENERATION",
+                "OTHER"
+              ]
+            },
+            "AiProvider": {
+              "kind": "valueSet",
+              "values": [
+                "OPENAI",
+                "GOOGLE",
+                "ANTHROPIC",
+                "OTHER"
+              ]
+            },
+            "ContactMessageStatus": {
+              "kind": "valueSet",
+              "values": [
+                "NEW",
+                "READ",
+                "REPLIED",
+                "CLOSED"
+              ]
+            },
             "HardwareJobStatus": {
               "kind": "valueSet",
               "values": [
@@ -3208,6 +6422,14 @@
                 "ADJUSTMENT"
               ]
             },
+            "LongevityPreference": {
+              "kind": "valueSet",
+              "values": [
+                "SHORT",
+                "MODERATE",
+                "LONG"
+              ]
+            },
             "MarkerType": {
               "kind": "valueSet",
               "values": [
@@ -3223,10 +6445,30 @@
                 "VOICE"
               ]
             },
+            "NotificationType": {
+              "kind": "valueSet",
+              "values": [
+                "ORDER",
+                "PAYMENT",
+                "SUPPORT",
+                "SYSTEM",
+                "PROMOTION"
+              ]
+            },
+            "OrderSource": {
+              "kind": "valueSet",
+              "values": [
+                "WEB",
+                "MOBILE",
+                "KIOSK"
+              ]
+            },
             "OrderStatus": {
               "kind": "valueSet",
               "values": [
                 "CREATED",
+                "PENDING_PAYMENT",
+                "PAID",
                 "QUEUED",
                 "PROCESSING",
                 "COMPLETED",
@@ -3234,19 +6476,22 @@
                 "CANCELLED"
               ]
             },
-            "PerfumeGender": {
+            "PaymentProvider": {
               "kind": "valueSet",
               "values": [
-                "MEN",
-                "WOMEN",
-                "UNISEX"
+                "STRIPE"
               ]
             },
-            "RecipientGender": {
+            "PaymentStatus": {
               "kind": "valueSet",
               "values": [
-                "MALE",
-                "FEMALE"
+                "PENDING",
+                "PROCESSING",
+                "PAID",
+                "FAILED",
+                "CANCELLED",
+                "REFUNDED",
+                "PARTIALLY_REFUNDED"
               ]
             },
             "Role": {
@@ -3255,6 +6500,42 @@
                 "USER",
                 "ADMIN"
               ]
+            },
+            "ScentIntensity": {
+              "kind": "valueSet",
+              "values": [
+                "LIGHT",
+                "MEDIUM",
+                "STRONG"
+              ]
+            },
+            "SupportTicketCategory": {
+              "kind": "valueSet",
+              "values": [
+                "PAYMENT",
+                "ORDER",
+                "ACCOUNT",
+                "HARDWARE",
+                "DELIVERY",
+                "OTHER"
+              ]
+            },
+            "SupportTicketStatus": {
+              "kind": "valueSet",
+              "values": [
+                "OPEN",
+                "IN_PROGRESS",
+                "RESOLVED",
+                "CLOSED"
+              ]
+            },
+            "TicketAttachmentType": {
+              "kind": "valueSet",
+              "values": [
+                "IMAGE",
+                "AUDIO",
+                "FILE"
+              ]
             }
           }
         },
@@ -3262,12 +6543,38 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "6a5cadd3418c17fed847e7fce2f2449e28d85d669dca299d6f29a6f52f293043"
+    "storageHash": "6862d869560c4166bf14d2fcc220946931e2c543830799275f7a2c31b05d04b3"
   },
   "execution": {
-    "executionHash": "665a9a763ea74a714df0d0ddb7b834bcf9307e0c655fff7546c079ae1ba1be2d",
+    "executionHash": "b6bb7f543067b227236f918ad87e2c87e6a42ad71ecf219b8ccb6a8cf2a07fc4",
     "mutations": {
       "defaults": [
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "aiModel"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updatedAt",
+            "namespace": "public",
+            "table": "aiModel"
+          }
+        },
         {
           "onCreate": {
             "id": "uuidv4",
@@ -3292,6 +6599,32 @@
             "column": "updatedAt",
             "namespace": "public",
             "table": "bin"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "contactMessage"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updatedAt",
+            "namespace": "public",
+            "table": "contactMessage"
           }
         },
         {
@@ -3398,6 +6731,28 @@
           "ref": {
             "column": "id",
             "namespace": "public",
+            "table": "notification"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "order"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "trackingToken",
+            "namespace": "public",
             "table": "order"
           }
         },
@@ -3414,6 +6769,43 @@
             "column": "updatedAt",
             "namespace": "public",
             "table": "order"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "payment"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updatedAt",
+            "namespace": "public",
+            "table": "payment"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "paymentEvent"
           }
         },
         {
@@ -3472,6 +6864,69 @@
           "ref": {
             "column": "id",
             "namespace": "public",
+            "table": "supportTicket"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updatedAt",
+            "namespace": "public",
+            "table": "supportTicket"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "supportTicketAttachment"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "systemSetting"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updatedAt",
+            "namespace": "public",
+            "table": "systemSetting"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
             "table": "user"
           }
         },
@@ -3488,6 +6943,32 @@
             "column": "updatedAt",
             "namespace": "public",
             "table": "user"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "userSettings"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updatedAt",
+            "namespace": "public",
+            "table": "userSettings"
           }
         }
       ]
