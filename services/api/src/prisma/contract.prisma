@@ -1,25 +1,14 @@
 // use prisma-8
 
+// ======================================================
+// ENUMS
+// ======================================================
+
 enum Role {
   @@type("pg/text@1")
 
   USER  = "USER"
   ADMIN = "ADMIN"
-}
-
-enum PerfumeGender {
-  @@type("pg/text@1")
-
-  MEN    = "MEN"
-  WOMEN  = "WOMEN"
-  UNISEX = "UNISEX"
-}
-
-enum RecipientGender {
-  @@type("pg/text@1")
-
-  MALE   = "MALE"
-  FEMALE = "FEMALE"
 }
 
 enum MarkerType {
@@ -37,15 +26,25 @@ enum MessageType {
   VOICE = "VOICE"
 }
 
+enum OrderSource {
+  @@type("pg/text@1")
+
+  WEB    = "WEB"
+  MOBILE = "MOBILE"
+  KIOSK  = "KIOSK"
+}
+
 enum OrderStatus {
   @@type("pg/text@1")
 
-  CREATED    = "CREATED"
-  QUEUED     = "QUEUED"
-  PROCESSING = "PROCESSING"
-  COMPLETED  = "COMPLETED"
-  FAILED     = "FAILED"
-  CANCELLED  = "CANCELLED"
+  CREATED         = "CREATED"
+  PENDING_PAYMENT = "PENDING_PAYMENT"
+  PAID            = "PAID"
+  QUEUED          = "QUEUED"
+  PROCESSING      = "PROCESSING"
+  COMPLETED       = "COMPLETED"
+  FAILED          = "FAILED"
+  CANCELLED       = "CANCELLED"
 }
 
 enum HardwareJobStatus {
@@ -73,6 +72,109 @@ enum InventoryMovementType {
   ADJUSTMENT = "ADJUSTMENT"
 }
 
+enum ScentIntensity {
+  @@type("pg/text@1")
+
+  LIGHT  = "LIGHT"
+  MEDIUM = "MEDIUM"
+  STRONG = "STRONG"
+}
+
+enum LongevityPreference {
+  @@type("pg/text@1")
+
+  SHORT    = "SHORT"
+  MODERATE = "MODERATE"
+  LONG     = "LONG"
+}
+
+enum PaymentProvider {
+  @@type("pg/text@1")
+
+  STRIPE = "STRIPE"
+}
+
+enum PaymentStatus {
+  @@type("pg/text@1")
+
+  PENDING            = "PENDING"
+  PROCESSING         = "PROCESSING"
+  PAID               = "PAID"
+  FAILED             = "FAILED"
+  CANCELLED          = "CANCELLED"
+  REFUNDED           = "REFUNDED"
+  PARTIALLY_REFUNDED = "PARTIALLY_REFUNDED"
+}
+
+enum NotificationType {
+  @@type("pg/text@1")
+
+  ORDER     = "ORDER"
+  PAYMENT   = "PAYMENT"
+  SUPPORT   = "SUPPORT"
+  SYSTEM    = "SYSTEM"
+  PROMOTION = "PROMOTION"
+}
+
+enum SupportTicketCategory {
+  @@type("pg/text@1")
+
+  PAYMENT  = "PAYMENT"
+  ORDER    = "ORDER"
+  ACCOUNT  = "ACCOUNT"
+  HARDWARE = "HARDWARE"
+  DELIVERY = "DELIVERY"
+  OTHER    = "OTHER"
+}
+
+enum SupportTicketStatus {
+  @@type("pg/text@1")
+
+  OPEN        = "OPEN"
+  IN_PROGRESS = "IN_PROGRESS"
+  RESOLVED    = "RESOLVED"
+  CLOSED      = "CLOSED"
+}
+
+enum TicketAttachmentType {
+  @@type("pg/text@1")
+
+  IMAGE = "IMAGE"
+  AUDIO = "AUDIO"
+  FILE  = "FILE"
+}
+
+enum ContactMessageStatus {
+  @@type("pg/text@1")
+
+  NEW     = "NEW"
+  READ    = "READ"
+  REPLIED = "REPLIED"
+  CLOSED  = "CLOSED"
+}
+
+enum AiProvider {
+  @@type("pg/text@1")
+
+  OPENAI    = "OPENAI"
+  GOOGLE    = "GOOGLE"
+  ANTHROPIC = "ANTHROPIC"
+  OTHER     = "OTHER"
+}
+
+enum AiModelPurpose {
+  @@type("pg/text@1")
+
+  PERFUME_RECOMMENDATION = "PERFUME_RECOMMENDATION"
+  TEXT_GENERATION        = "TEXT_GENERATION"
+  OTHER                  = "OTHER"
+}
+
+
+// ======================================================
+// USER
+// ======================================================
+
 model User {
   id    Uuid   @id @default(uuid())
   email String @unique
@@ -80,12 +182,59 @@ model User {
 
   role Role @default(USER)
 
-  preferences GiftPreference[]
-  orders      Order[]
+  // Soft delete
+  deletedAt DateTime?
+
+  preferences     GiftPreference[]
+  orders          Order[]
+  payments        Payment[]
+  notifications   Notification[]
+  supportTickets  SupportTicket[]
+  contactMessages ContactMessage[]
+
+  settings UserSettings?
 
   createdAt temporal.createdAt()
   updatedAt temporal.updatedAt()
+
+  @@rls
 }
+
+
+// ======================================================
+// USER SETTINGS
+// ======================================================
+
+model UserSettings {
+  id Uuid @id @default(uuid())
+
+  userId Uuid @unique
+
+  user User @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  emailNotifications     Boolean @default(true)
+  pushNotifications      Boolean @default(true)
+  orderUpdates           Boolean @default(true)
+  paymentUpdates         Boolean @default(true)
+  supportUpdates         Boolean @default(true)
+  marketingNotifications Boolean @default(false)
+
+  language String @default("en")
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+
+  @@rls
+}
+
+
+// ======================================================
+// PERFUME CATALOG
+// ======================================================
 
 model Perfume {
   id  Uuid   @id @default(uuid())
@@ -94,17 +243,33 @@ model Perfume {
   name  String
   brand String
 
-  targetGender PerfumeGender
-
   price Numeric(10, 2)
 
   fragranceFamily String
-  notes           String[]
-  tags            String[]
 
+  // Example:
+  // ["vanilla", "rose", "jasmine"]
+  notes String[]
+
+  // Example:
+  // ["sweet", "floral", "elegant", "evening"]
+  tags String[]
+
+  intensity ScentIntensity?
+
+  longevity LongevityPreference?
+
+  // Full perfume description editable by Admin.
   description String?
-  imageUrl    String?
 
+  // File path inside public Supabase bucket:
+  // perfume-images
+  //
+  // Example:
+  // PERF-001/main.webp
+  imageStoragePath String?
+
+  // Admin can hide perfume without deleting it.
   active Boolean @default(true)
 
   bins                Bin[]
@@ -114,23 +279,49 @@ model Perfume {
 
   createdAt temporal.createdAt()
   updatedAt temporal.updatedAt()
+
+  @@rls
 }
+
+
+// ======================================================
+// STORAGE BINS
+// ======================================================
 
 model Bin {
   id   Uuid   @id @default(uuid())
   code String @unique
 
+  // Example:
+  // B1 = row 1, column 1
   row    Int
   column Int
 
-  markerType  MarkerType @default(ARUCO)
-  markerValue String     @unique
+  // QR or ArUco assigned by Admin.
+  markerType MarkerType @default(ARUCO)
+
+  // Examples:
+  // "1"
+  // "B1"
+  // "ARUCO-01"
+  markerValue String @unique
+
+  // File path inside public Supabase bucket:
+  // bin-markers
+  //
+  // Example:
+  // B1/marker.png
+  markerImagePath String?
 
   capacity Int?
 
-  quantity         Int @default(0)
+  // Physical available quantity.
+  quantity Int @default(0)
+
+  // Quantity temporarily reserved for orders.
   reservedQuantity Int @default(0)
 
+  // Admin chooses which perfume belongs to this bin.
   perfumeId Uuid?
 
   perfume Perfume? @relation(
@@ -146,11 +337,19 @@ model Bin {
   updatedAt temporal.updatedAt()
 
   @@unique([row, column])
+
+  @@rls
 }
+
+
+// ======================================================
+// GIFT PREFERENCES
+// ======================================================
 
 model GiftPreference {
   id Uuid @id @default(uuid())
 
+  // NULL for guest orders.
   userId Uuid?
 
   user User? @relation(
@@ -159,21 +358,52 @@ model GiftPreference {
     onDelete: SetNull
   )
 
-  recipientName String?
+  // Recipient does NOT need a PERFUMIA account.
+  // This is the name printed on the gift.
+  recipientName String
 
-  age    Int
-  gender RecipientGender
-
-  interests            String[]
-  fragrancePreferences String[]
+  // Optional AI recommendation signal.
+  age Int?
 
   budget Numeric(10, 2)
 
+  // User free-text description.
+  // Example:
+  // "I want something elegant, floral and slightly sweet."
+  description String?
+
+  // Example:
+  // ["rose", "vanilla", "jasmine"]
+  preferredNotes String[]
+
+  // Example:
+  // ["floral", "sweet", "fresh"]
+  fragrancePreferences String[]
+
+  intensity ScentIntensity?
+
+  longevity LongevityPreference?
+
+  // Examples:
+  // elegant
+  // romantic
+  // fresh
+  // luxurious
+  fragranceStyle String?
+
   recommendationRuns RecommendationRun[]
-  order              Order?
+
+  order Order?
 
   createdAt temporal.createdAt()
+
+  @@rls
 }
+
+
+// ======================================================
+// AI RECOMMENDATION RUN
+// ======================================================
 
 model RecommendationRun {
   id Uuid @id @default(uuid())
@@ -186,15 +416,32 @@ model RecommendationRun {
     onDelete: Cascade
   )
 
+  aiModelId Uuid?
+
+  aiModel AiModel? @relation(
+    fields: [aiModelId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  // Snapshot of engine/model used.
   engine        String?
   engineVersion String?
 
+  // Exact recommendation input at that moment.
   inputSnapshot Jsonb?
 
   items RecommendationItem[]
 
   createdAt temporal.createdAt()
+
+  @@rls
 }
+
+
+// ======================================================
+// RECOMMENDATION RESULT
+// ======================================================
 
 model RecommendationItem {
   id Uuid @id @default(uuid())
@@ -214,21 +461,34 @@ model RecommendationItem {
     references: [id]
   )
 
-  rank   Int
-  score  Float?
+  // 1 / 2 / 3
+  rank Int
+
+  score Float?
+
+  // AI explanation displayed to customer.
   reason String?
 
   createdAt temporal.createdAt()
 
   @@unique([runId, rank])
   @@unique([runId, perfumeId])
+
+  @@rls
 }
+
+
+// ======================================================
+// ORDER
+// ======================================================
 
 model Order {
   id Uuid @id @default(uuid())
 
   orderNumber String @unique
 
+  // NULL = Guest order.
+  // Filled = Registered user order.
   userId Uuid?
 
   user User? @relation(
@@ -236,6 +496,19 @@ model Order {
     references: [id],
     onDelete: SetNull
   )
+
+  // WEB / MOBILE / KIOSK
+  source OrderSource
+
+  // Guest contact / receipt information.
+  contactEmail String?
+  contactPhone String?
+
+  // Secure token used for guest tracking.
+  //
+  // Example:
+  // /track/{trackingToken}
+  trackingToken Uuid @unique @default(uuid())
 
   preferenceId Uuid @unique
 
@@ -251,18 +524,33 @@ model Order {
     references: [id]
   )
 
+  // Snapshot of perfume price when order was made.
   unitPrice Numeric(10, 2)
 
   status OrderStatus @default(CREATED)
 
   giftMessage GiftMessage?
+
   hardwareJob HardwareJob?
+
+  payments Payment[]
+
+  notifications Notification[]
+
+  supportTickets SupportTicket[]
 
   inventoryMovements InventoryMovement[]
 
   createdAt temporal.createdAt()
   updatedAt temporal.updatedAt()
+
+  @@rls
 }
+
+
+// ======================================================
+// GIFT MESSAGE + QR
+// ======================================================
 
 model GiftMessage {
   id Uuid @id @default(uuid())
@@ -275,70 +563,124 @@ model GiftMessage {
     onDelete: Cascade
   )
 
+  // NONE / TEXT / VOICE
   type MessageType @default(NONE)
 
+  // Text message for recipient.
   messageText String?
-  audioUrl    String?
 
+  // File path inside PRIVATE Supabase bucket:
+  // gift-voice-messages
+  //
+  // Example:
+  // ORDER-1001/message.webm
+  //
+  // Backend generates a temporary Signed URL when needed.
+  audioStoragePath String?
+
+  // Public random token embedded in gift QR.
+  // Never expose Order ID directly.
   qrToken Uuid @unique @default(uuid())
-  qrUrl   String?
+
+  qrUrl String?
 
   createdAt temporal.createdAt()
   updatedAt temporal.updatedAt()
+
+  @@rls
 }
 
-model HardwareJob {
+
+// ======================================================
+// PAYMENT
+// ======================================================
+
+model Payment {
   id Uuid @id @default(uuid())
 
-  orderId Uuid @unique
+  // NULL when Guest pays.
+  userId Uuid?
+
+  user User? @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  orderId Uuid
 
   order Order @relation(
     fields: [orderId],
-    references: [id],
-    onDelete: Cascade
-  )
-
-  targetBinId Uuid
-
-  targetBin Bin @relation(
-    fields: [targetBinId],
     references: [id]
   )
 
-  status HardwareJobStatus @default(WAITING)
+  provider PaymentProvider @default(STRIPE)
 
-  retryCount Int @default(0)
+  amount Numeric(10, 2)
 
-  errorCode    String?
-  errorMessage String?
+  currency String @default("USD")
 
-  startedAt   DateTime?
-  completedAt DateTime?
+  status PaymentStatus @default(PENDING)
 
-  events HardwareJobEvent[]
+  stripePaymentIntentId String? @unique
+
+  stripeCheckoutSessionId String? @unique
+
+  failureCode String?
+
+  failureMessage String?
+
+  paidAt DateTime?
+
+  refundedAt DateTime?
+
+  events PaymentEvent[]
+
+  supportTickets SupportTicket[]
 
   createdAt temporal.createdAt()
   updatedAt temporal.updatedAt()
+
+  @@rls
 }
 
-model HardwareJobEvent {
+
+// ======================================================
+// PAYMENT EVENTS / STRIPE WEBHOOKS
+// ======================================================
+
+model PaymentEvent {
   id Uuid @id @default(uuid())
 
-  jobId Uuid
+  paymentId Uuid
 
-  job HardwareJob @relation(
-    fields: [jobId],
+  payment Payment @relation(
+    fields: [paymentId],
     references: [id],
     onDelete: Cascade
   )
 
-  status HardwareJobStatus
+  // Stripe webhook Event ID.
+  providerEventId String @unique
 
-  message String?
-  details Jsonb?
+  eventType String
+
+  // Original provider event details.
+  payload Jsonb?
+
+  processed Boolean @default(false)
+
+  processedAt DateTime?
 
   createdAt temporal.createdAt()
+
+  @@rls
 }
+
+
+// ======================================================
+// INVENTORY MOVEMENT
+// ======================================================
 
 model InventoryMovement {
   id Uuid @id @default(uuid())
@@ -365,12 +707,359 @@ model InventoryMovement {
     onDelete: SetNull
   )
 
+  // RESTOCK / RESERVE / RELEASE / PICK / ADJUSTMENT
   type InventoryMovementType
 
-  stockDelta    Int @default(0)
+  // Examples:
+  // RESTOCK = +5
+  // PICK    = -1
+  stockDelta Int @default(0)
+
+  // Examples:
+  // RESERVE = +1
+  // PICK    = -1
   reservedDelta Int @default(0)
 
   note String?
 
   createdAt temporal.createdAt()
+
+  @@rls
+}
+
+
+// ======================================================
+// HARDWARE JOB
+// ======================================================
+
+model HardwareJob {
+  id Uuid @id @default(uuid())
+
+  orderId Uuid @unique
+
+  order Order @relation(
+    fields: [orderId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  // Bin selected for physical pick.
+  targetBinId Uuid
+
+  targetBin Bin @relation(
+    fields: [targetBinId],
+    references: [id]
+  )
+
+  status HardwareJobStatus @default(WAITING)
+
+  retryCount Int @default(0)
+
+  errorCode String?
+
+  errorMessage String?
+
+  startedAt DateTime?
+
+  completedAt DateTime?
+
+  events HardwareJobEvent[]
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+
+  @@rls
+}
+
+
+// ======================================================
+// HARDWARE JOB EVENTS
+// ======================================================
+
+model HardwareJobEvent {
+  id Uuid @id @default(uuid())
+
+  jobId Uuid
+
+  job HardwareJob @relation(
+    fields: [jobId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  status HardwareJobStatus
+
+  message String?
+
+  // Examples:
+  // detected ArUco / QR
+  // expected marker
+  // camera coordinates
+  // gripper position
+  // ESP32 response
+  // verification result
+  // sensor state
+  details Jsonb?
+
+  createdAt temporal.createdAt()
+
+  @@rls
+}
+
+
+// ======================================================
+// NOTIFICATIONS
+// ======================================================
+
+model Notification {
+  id Uuid @id @default(uuid())
+
+  // Notifications are for registered users.
+  // Guests/Kiosk use realtime order tracking.
+  userId Uuid
+
+  user User @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  orderId Uuid?
+
+  order Order? @relation(
+    fields: [orderId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  type NotificationType
+
+  title String
+
+  message String
+
+  read Boolean @default(false)
+
+  readAt DateTime?
+
+  createdAt temporal.createdAt()
+
+  @@rls
+}
+
+
+// ======================================================
+// SUPPORT / COMPLAINT TICKETS
+// ======================================================
+
+model SupportTicket {
+  id Uuid @id @default(uuid())
+
+  ticketNumber String @unique
+
+  // NULL when ticket belongs to Guest.
+  userId Uuid?
+
+  user User? @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  // Guest information.
+  // Can also be kept as snapshots for registered users.
+  requesterName String?
+
+  requesterEmail String?
+
+  // Optional order relation.
+  orderId Uuid?
+
+  order Order? @relation(
+    fields: [orderId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  // Optional payment relation.
+  paymentId Uuid?
+
+  payment Payment? @relation(
+    fields: [paymentId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  category SupportTicketCategory
+
+  subject String
+
+  message String
+
+  status SupportTicketStatus @default(OPEN)
+
+  adminReply String?
+
+  // Image / voice / file attachments.
+  attachments SupportTicketAttachment[]
+
+  resolvedAt DateTime?
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+
+  @@rls
+}
+
+
+// ======================================================
+// SUPPORT TICKET ATTACHMENTS
+// ======================================================
+
+model SupportTicketAttachment {
+  id Uuid @id @default(uuid())
+
+  ticketId Uuid
+
+  ticket SupportTicket @relation(
+    fields: [ticketId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  // IMAGE / AUDIO / FILE
+  type TicketAttachmentType
+
+  fileName String?
+
+  // Examples:
+  // image/jpeg
+  // image/png
+  // image/webp
+  // audio/webm
+  // audio/mpeg
+  // audio/mp4
+  // audio/wav
+  // application/pdf
+  mimeType String?
+
+  // File path inside PRIVATE Supabase bucket:
+  // support-attachments
+  //
+  // Example:
+  // TICKET-1001/image-1.jpg
+  storagePath String
+
+  sizeBytes Int?
+
+  createdAt temporal.createdAt()
+
+  @@rls
+}
+
+
+// ======================================================
+// CONTACT BOX
+// ======================================================
+
+model ContactMessage {
+  id Uuid @id @default(uuid())
+
+  // NULL because visitor may contact PERFUMIA
+  // without an account.
+  userId Uuid?
+
+  user User? @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  name String
+
+  email String
+
+  subject String
+
+  message String
+
+  status ContactMessageStatus @default(NEW)
+
+  adminReply String?
+
+  repliedAt DateTime?
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+
+  @@rls
+}
+
+
+// ======================================================
+// AI MODELS
+// ======================================================
+
+model AiModel {
+  id Uuid @id @default(uuid())
+
+  // Friendly Admin name.
+  // Example:
+  // "Main Perfume Recommender"
+  name String
+
+  provider AiProvider
+
+  // Actual provider model ID.
+  modelIdentifier String
+
+  purpose AiModelPurpose @default(PERFUME_RECOMMENDATION)
+
+  enabled Boolean @default(true)
+
+  priority Int @default(1)
+
+  // Non-secret configuration only.
+  //
+  // Example:
+  // {
+  //   "temperature": 0.3,
+  //   "maxTokens": 800
+  // }
+  //
+  // API keys MUST NOT be stored here.
+  configuration Jsonb?
+
+  recommendationRuns RecommendationRun[]
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+
+  @@unique([provider, modelIdentifier, purpose])
+
+  @@rls
+}
+
+
+// ======================================================
+// SYSTEM SETTINGS
+// ======================================================
+
+model SystemSetting {
+  id Uuid @id @default(uuid())
+
+  // Examples:
+  // kiosk.welcomeMessage
+  // recommendation.maxResults
+  // hardware.enabled
+  key String @unique
+
+  value Jsonb
+
+  description String?
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+
+  @@rls
 }
