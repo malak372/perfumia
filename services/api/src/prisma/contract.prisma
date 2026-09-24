@@ -1,21 +1,376 @@
 // use prisma-8
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String?
-  name      String?
-  posts     Post[]
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+enum Role {
+  @@type("pg/text@1")
+
+  USER  = "USER"
+  ADMIN = "ADMIN"
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+enum PerfumeGender {
+  @@type("pg/text@1")
+
+  MEN    = "MEN"
+  WOMEN  = "WOMEN"
+  UNISEX = "UNISEX"
+}
+
+enum RecipientGender {
+  @@type("pg/text@1")
+
+  MALE   = "MALE"
+  FEMALE = "FEMALE"
+}
+
+enum MarkerType {
+  @@type("pg/text@1")
+
+  ARUCO = "ARUCO"
+  QR    = "QR"
+}
+
+enum MessageType {
+  @@type("pg/text@1")
+
+  NONE  = "NONE"
+  TEXT  = "TEXT"
+  VOICE = "VOICE"
+}
+
+enum OrderStatus {
+  @@type("pg/text@1")
+
+  CREATED    = "CREATED"
+  QUEUED     = "QUEUED"
+  PROCESSING = "PROCESSING"
+  COMPLETED  = "COMPLETED"
+  FAILED     = "FAILED"
+  CANCELLED  = "CANCELLED"
+}
+
+enum HardwareJobStatus {
+  @@type("pg/text@1")
+
+  WAITING   = "WAITING"
+  VERIFYING = "VERIFYING"
+  PICKING   = "PICKING"
+  PLACING   = "PLACING"
+  CLOSING   = "CLOSING"
+  PRINTING  = "PRINTING"
+  WAXING    = "WAXING"
+  DONE      = "DONE"
+  ERROR     = "ERROR"
+  CANCELLED = "CANCELLED"
+}
+
+enum InventoryMovementType {
+  @@type("pg/text@1")
+
+  RESTOCK    = "RESTOCK"
+  RESERVE    = "RESERVE"
+  RELEASE    = "RELEASE"
+  PICK       = "PICK"
+  ADJUSTMENT = "ADJUSTMENT"
+}
+
+model User {
+  id    Uuid   @id @default(uuid())
+  email String @unique
+  name  String?
+
+  role Role @default(USER)
+
+  preferences GiftPreference[]
+  orders      Order[]
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+}
+
+model Perfume {
+  id  Uuid   @id @default(uuid())
+  sku String @unique
+
+  name  String
+  brand String
+
+  targetGender PerfumeGender
+
+  price Numeric(10, 2)
+
+  fragranceFamily String
+  notes           String[]
+  tags            String[]
+
+  description String?
+  imageUrl    String?
+
+  active Boolean @default(true)
+
+  bins                Bin[]
+  recommendationItems RecommendationItem[]
+  orders              Order[]
+  inventoryMovements  InventoryMovement[]
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+}
+
+model Bin {
+  id   Uuid   @id @default(uuid())
+  code String @unique
+
+  row    Int
+  column Int
+
+  markerType  MarkerType @default(ARUCO)
+  markerValue String     @unique
+
+  capacity Int?
+
+  quantity         Int @default(0)
+  reservedQuantity Int @default(0)
+
+  perfumeId Uuid?
+
+  perfume Perfume? @relation(
+    fields: [perfumeId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  hardwareJobs       HardwareJob[]
+  inventoryMovements InventoryMovement[]
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+
+  @@unique([row, column])
+}
+
+model GiftPreference {
+  id Uuid @id @default(uuid())
+
+  userId Uuid?
+
+  user User? @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  recipientName String?
+
+  age    Int
+  gender RecipientGender
+
+  interests            String[]
+  fragrancePreferences String[]
+
+  budget Numeric(10, 2)
+
+  recommendationRuns RecommendationRun[]
+  order              Order?
+
+  createdAt temporal.createdAt()
+}
+
+model RecommendationRun {
+  id Uuid @id @default(uuid())
+
+  preferenceId Uuid
+
+  preference GiftPreference @relation(
+    fields: [preferenceId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  engine        String?
+  engineVersion String?
+
+  inputSnapshot Jsonb?
+
+  items RecommendationItem[]
+
+  createdAt temporal.createdAt()
+}
+
+model RecommendationItem {
+  id Uuid @id @default(uuid())
+
+  runId Uuid
+
+  run RecommendationRun @relation(
+    fields: [runId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  perfumeId Uuid
+
+  perfume Perfume @relation(
+    fields: [perfumeId],
+    references: [id]
+  )
+
+  rank   Int
+  score  Float?
+  reason String?
+
+  createdAt temporal.createdAt()
+
+  @@unique([runId, rank])
+  @@unique([runId, perfumeId])
+}
+
+model Order {
+  id Uuid @id @default(uuid())
+
+  orderNumber String @unique
+
+  userId Uuid?
+
+  user User? @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  preferenceId Uuid @unique
+
+  preference GiftPreference @relation(
+    fields: [preferenceId],
+    references: [id]
+  )
+
+  selectedPerfumeId Uuid
+
+  selectedPerfume Perfume @relation(
+    fields: [selectedPerfumeId],
+    references: [id]
+  )
+
+  unitPrice Numeric(10, 2)
+
+  status OrderStatus @default(CREATED)
+
+  giftMessage GiftMessage?
+  hardwareJob HardwareJob?
+
+  inventoryMovements InventoryMovement[]
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+}
+
+model GiftMessage {
+  id Uuid @id @default(uuid())
+
+  orderId Uuid @unique
+
+  order Order @relation(
+    fields: [orderId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  type MessageType @default(NONE)
+
+  messageText String?
+  audioUrl    String?
+
+  qrToken Uuid @unique @default(uuid())
+  qrUrl   String?
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+}
+
+model HardwareJob {
+  id Uuid @id @default(uuid())
+
+  orderId Uuid @unique
+
+  order Order @relation(
+    fields: [orderId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  targetBinId Uuid
+
+  targetBin Bin @relation(
+    fields: [targetBinId],
+    references: [id]
+  )
+
+  status HardwareJobStatus @default(WAITING)
+
+  retryCount Int @default(0)
+
+  errorCode    String?
+  errorMessage String?
+
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  events HardwareJobEvent[]
+
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+}
+
+model HardwareJobEvent {
+  id Uuid @id @default(uuid())
+
+  jobId Uuid
+
+  job HardwareJob @relation(
+    fields: [jobId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  status HardwareJobStatus
+
+  message String?
+  details Jsonb?
+
+  createdAt temporal.createdAt()
+}
+
+model InventoryMovement {
+  id Uuid @id @default(uuid())
+
+  binId Uuid
+
+  bin Bin @relation(
+    fields: [binId],
+    references: [id]
+  )
+
+  perfumeId Uuid
+
+  perfume Perfume @relation(
+    fields: [perfumeId],
+    references: [id]
+  )
+
+  orderId Uuid?
+
+  order Order? @relation(
+    fields: [orderId],
+    references: [id],
+    onDelete: SetNull
+  )
+
+  type InventoryMovementType
+
+  stockDelta    Int @default(0)
+  reservedDelta Int @default(0)
+
+  note String?
+
+  createdAt temporal.createdAt()
 }
