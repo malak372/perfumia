@@ -185,6 +185,27 @@ model User {
   // Soft delete
   deletedAt DateTime?
 
+  // ==================================================
+  // LOGIN SECURITY
+  // ==================================================
+
+  // Consecutive failed login attempts before next lock.
+  failedLoginAttempts Int @default(0)
+
+  // Progressive lock level.
+  // 0 = no previous lock
+  // 1 = 1 minute
+  // 2 = 5 minutes
+  // 3 = 15 minutes
+  // 4 = 30 minutes
+  // 5 = 60 minutes
+  lockLevel Int @default(0)
+
+  // Account cannot login until this time.
+  lockedUntil DateTime?
+
+  lastFailedLoginAt DateTime?
+
   preferences     GiftPreference[]
   orders          Order[]
   payments        Payment[]
@@ -199,7 +220,6 @@ model User {
 
   @@rls
 }
-
 
 // ======================================================
 // USER SETTINGS

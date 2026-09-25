@@ -3422,10 +3422,38 @@
                   "kind": "scalar"
                 }
               },
+              "failedLoginAttempts": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
               "id": {
                 "nullable": false,
                 "type": {
                   "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "lastFailedLoginAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "lockLevel": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "lockedUntil": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
                   "kind": "scalar"
                 }
               },
@@ -3576,8 +3604,20 @@
                 "email": {
                   "column": "email"
                 },
+                "failedLoginAttempts": {
+                  "column": "failedLoginAttempts"
+                },
                 "id": {
                   "column": "id"
+                },
+                "lastFailedLoginAt": {
+                  "column": "lastFailedLoginAt"
+                },
+                "lockLevel": {
+                  "column": "lockLevel"
+                },
+                "lockedUntil": {
+                  "column": "lockedUntil"
                 },
                 "name": {
                   "column": "name"
@@ -6200,10 +6240,38 @@
                   "nativeType": "text",
                   "nullable": false
                 },
+                "failedLoginAttempts": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
                 "id": {
                   "codecId": "pg/uuid@1",
                   "nativeType": "uuid",
                   "nullable": false
+                },
+                "lastFailedLoginAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "lockLevel": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "lockedUntil": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
                 },
                 "name": {
                   "codecId": "pg/text@1",
@@ -6543,7 +6611,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "6862d869560c4166bf14d2fcc220946931e2c543830799275f7a2c31b05d04b3"
+    "storageHash": "2c89ef2d4176b67477b2c363d6a182f4fc833dc888f5854b726270862788457a"
   },
   "execution": {
     "executionHash": "b6bb7f543067b227236f918ad87e2c87e6a42ad71ecf219b8ccb6a8cf2a07fc4",
