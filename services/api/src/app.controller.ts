@@ -1,12 +1,19 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service.js';
+import {
+  Controller,
+  Get,
+} from '@nestjs/common';
 
-@Controller()
+import { Public } from './common/decorators/public.decorator.js';
+
+@Controller('health')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
+  @Public()
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  health() {
+    return {
+      success: true,
+      service: 'PERFUMIA API',
+      status: 'ok',
+    };
   }
 }
